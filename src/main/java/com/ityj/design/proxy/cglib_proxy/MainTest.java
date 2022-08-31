@@ -1,5 +1,8 @@
 package com.ityj.design.proxy.cglib_proxy;
 
+/*
+*   CGLIB动态代理
+* */
 public class MainTest {
     public static void main(String[] args) {
 

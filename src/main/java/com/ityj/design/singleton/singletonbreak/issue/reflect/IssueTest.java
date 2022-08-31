@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+/*
+*  破坏单例，通过反射创建两个对象
+* */
 @Slf4j
 public class IssueTest {
     public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {

@@ -2,11 +2,11 @@ package com.ityj.design.strategy.test;
 
 import java.math.BigDecimal;
 
+/*
+ *   策略模式
+ * */
 public class TestMain {
 
-    /*
-    *   策略模式
-    * */
     public static void main(String[] args) {
 
         PaymentService paymentService = new PaymentService();

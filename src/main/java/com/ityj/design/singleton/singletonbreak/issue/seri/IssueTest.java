@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 
+/*
+ *  破坏单例，通过反序列化创建两个对象
+ * */
 @Slf4j
 public class IssueTest {
     public static void main(String[] args) {

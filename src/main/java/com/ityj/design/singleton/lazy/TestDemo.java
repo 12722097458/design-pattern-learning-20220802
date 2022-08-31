@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/*
+*   单例模式 - 懒汉模式
+* */
 public class TestDemo {
     public static void main(String[] args) {
 

@@ -1,5 +1,8 @@
 package com.ityj.design.combination;
 
+/*
+*   组合模式
+* */
 public class MainTest {
     public static void main(String[] args) {
 

@@ -1,5 +1,8 @@
 package com.ityj.design.singleton.hungry;
 
+/*
+*   单例模式 - 饿汉
+* */
 public class TestDemo {
     public static void main(String[] args) {
 
