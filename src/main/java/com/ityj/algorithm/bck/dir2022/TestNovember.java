@@ -1,10 +1,9 @@
-package com.ityj.algorithm.test;
+package com.ityj.algorithm.bck.dir2022;
 
 import com.ityj.algorithm.entity.ListNode;
 import com.ityj.algorithm.entity.Node;
 import com.ityj.algorithm.entity.TreeNode;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;

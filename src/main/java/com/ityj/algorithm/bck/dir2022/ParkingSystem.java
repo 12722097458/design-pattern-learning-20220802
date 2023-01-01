@@ -1,4 +1,4 @@
-package com.ityj.algorithm.test;
+package com.ityj.algorithm.bck.dir2022;
 
 class ParkingSystem {
 
