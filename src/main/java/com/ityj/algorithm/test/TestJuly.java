@@ -1,15 +1,9 @@
 package com.ityj.algorithm.test;
 
 import com.ityj.algorithm.entity.ListNode;
-import com.sun.xml.bind.v2.util.StackRecorder;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.xmlunit.diff.Diff;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 public class TestJuly {
@@ -251,9 +245,16 @@ public class TestJuly {
     @Test
     public void testData() {
         int[] arr1 = new int[]{1,15,6,3};
-        int[][] edges = new int[][]{{1,2}, {2,3}, {4,2}};
-        String leEeetcode = makeGood("s");
-        System.out.println("leEeetcode = " + leEeetcode);
+        int[] ints = Arrays.stream(arr1).limit(100).toArray();
+        System.out.println("ints.length = " + ints.length);
+        Arrays.stream(arr1).forEach(x -> {
+            if (x == 15) {
+                throw new RuntimeException("ssd");
+            }
+            System.out.println("x = " + x);
+        });
+
+        System.out.println("end");
     }
 
     public static void main(String[] args) throws Exception{
