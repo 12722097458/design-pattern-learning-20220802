@@ -1,4 +1,4 @@
-package com.ityj.algorithm.test;
+package com.ityj.algorithm.bck.dir2022.year2023;
 
 import com.ityj.algorithm.entity.TreeNode;
 import org.junit.jupiter.api.Test;

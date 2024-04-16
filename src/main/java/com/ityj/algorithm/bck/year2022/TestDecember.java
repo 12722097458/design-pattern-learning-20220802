@@ -1,4 +1,4 @@
-package com.ityj.algorithm.test;
+package com.ityj.algorithm.bck.year2022;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package com.ityj.algorithm.bck.dir2022;
+package com.ityj.algorithm.bck.year2022;
 
 import com.ityj.algorithm.entity.ListNode;
 import com.ityj.algorithm.entity.Node;
