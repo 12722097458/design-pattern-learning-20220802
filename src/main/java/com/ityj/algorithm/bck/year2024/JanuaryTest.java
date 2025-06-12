@@ -1,4 +1,4 @@
-package com.ityj.algorithm.year2024;
+package com.ityj.algorithm.bck.year2024;
 
 import java.util.Arrays;
 

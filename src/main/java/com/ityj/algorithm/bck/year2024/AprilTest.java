@@ -1,4 +1,4 @@
-package com.ityj.algorithm.year2024;
+package com.ityj.algorithm.bck.year2024;
 
 import com.ityj.algorithm.entity.TreeNode;
 import lombok.extern.slf4j.Slf4j;
