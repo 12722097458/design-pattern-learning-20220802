@@ -202,6 +202,19 @@ public class TestJune {
         return result;
     }
 
+    // 136. 只出现一次的数字
+    public int singleNumber(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (set.contains(num)) {
+                set.remove(num);
+            } else {
+                set.add(num);
+            }
+        }
+        return set.stream().findFirst().get();
+    }
+
     @Test
     public void testMethod() {
         int[] arr = {0,1,0,3,12};
