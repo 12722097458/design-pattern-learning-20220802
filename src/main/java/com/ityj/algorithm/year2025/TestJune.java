@@ -98,11 +98,116 @@ public class TestJune {
         return max;
     }
 
+    // 283. 移动零
+    public void moveZeroes(int[] nums) {
+        int[] result = new int[nums.length];
+        int index = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                result[index++] = nums[i];
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = result[i];
+        }
+    }
+
+    // 双指针
+    public void moveZeroes2(int[] nums) {
+        int length = nums.length;
+        int left = 0;   // 一直指向0, 已处理的最右侧
+        int right = 0;  // 未处理的最左侧, 找到非0就和left互换位置
+
+        while (right < length) {
+            // 不等于0就不用换位置
+            // 对于index=0, left和right同时指向index0,
+            // 1. =0 --> right++, 不做替换。 没问题
+            // 2. !=0 -> 进行替换， 然后left++ 指向索引1
+            if (nums[right] != 0) {
+                swap(nums, left, right);
+                left++;
+            }
+            right++;
+        }
+    }
+
+    private void swap(int[] nums, int left, int right) {
+        int temp = nums[left];
+        nums[left] = nums[right];
+        nums[right] = temp;
+    }
+
+    // 11. 盛最多水的容器
+    public int maxArea2_notwork(int[] height) { //timeout error
+        int maxArea = 0;
+        for (int i = 0; i < height.length - 1; i++) {
+            int leftHeight = height[i];
+            for (int j = i + 1; j < height.length; j++) {
+                int rightHeight = height[j];
+                int area = calculateArea(Math.min(leftHeight, rightHeight), (j - i));
+                maxArea = Math.max(maxArea, area);
+            }
+        }
+        return maxArea;
+    }
+
+    private int calculateArea(int height, int width) {
+        return height * width;
+    }
+
+    public int maxArea(int[] height) { //timeout error
+        int maxArea = 0;
+        int left = 0;
+        int right = height.length - 1;
+
+        while (left < right) {
+            int leftHeight = height[left];
+            int rightHeight = height[right];
+            maxArea = Math.max(calculateArea(Math.min(leftHeight, rightHeight), (right - left)), maxArea);
+            if (leftHeight < rightHeight) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return maxArea;
+    }
+
+    // 15. 三数之和   指针 beyond my ability
+    public List<List<Integer>> threeSum(int[] nums) {
+        return null;
+    }
+
+    // 3. 无重复字符的最长子串
+    public int lengthOfLongestSubstring(String s) {
+        int result = 0;
+        List<Character> list = new ArrayList();
+        for (int i = 0; i < s.length(); i++) {
+            while (list.contains(s.charAt(i))) {
+                list.remove(0);
+            }
+            list.add(s.charAt(i));
+            result = Math.max(result, list.size());
+        }
+        return result;
+    }
+
+    // 438. 找到字符串中所有字母异位词   不会做
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new ArrayList<>();
+        if (p.length() > s.length()) {
+            return result;
+        }
+
+        return result;
+    }
 
     @Test
     public void testMethod() {
-        int[] arr = {6};
-        int i = longestConsecutive(arr);
-        System.out.println("i = " + i);
+        int[] arr = {0,1,0,3,12};
+        String s = "aaaaaaaaaa";
+        String p = "aaaaaaaaaaaaa";
+        List<Integer> anagrams = findAnagrams(s, p);
+        System.out.println("anagrams = " + anagrams);
     }
 }
