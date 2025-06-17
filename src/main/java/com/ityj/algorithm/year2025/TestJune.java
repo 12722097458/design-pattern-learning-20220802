@@ -215,12 +215,121 @@ public class TestJune {
         return set.stream().findFirst().get();
     }
 
+    // 利用异或的特性 相同两数异或为0
+    public int singleNumber2(int[] nums) {
+        int result = 0;
+        for (int num : nums) {
+            result = result ^ num;
+        }
+        return result;
+    }
+
+    // 53. 最大子数组和
+    public int maxSubArray(int[] nums) {
+        int max = nums[0];
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+            if (sum < 0) {
+                max = Math.max(max, sum);
+                sum = 0;
+            } else {
+                max = Math.max(max, sum);
+
+            }
+        }
+        return max;
+    }
+
+    // 56. 合并区间
+    public int[][] merge(int[][] intervals) {
+        // intervals = [[1,3],[2,6],[8,10],[15,18]]
+        Arrays.sort(intervals, Comparator.comparingInt(p -> p[0])); // 按照左端点从小到大排序
+        List<int[]> list = new ArrayList<>();
+        for (int[] interval : intervals) {
+            if (list.size() == 0) {
+                list.add(interval);
+                continue;
+            }
+            int[] arr = list.get(list.size() - 1);
+            int left = arr[0];
+            int right = arr[1];
+
+            if (interval[0] > right) {  // 待比较的区间完全在 arr后面 --》 断开了
+                list.add(interval);
+                continue;
+            }
+
+            if (interval[1] > right) {
+                arr[1] = interval[1];
+            }
+        }
+        return list.toArray(new int[list.size()][]);
+    }
+
+    // 189. 轮转数组
+    public void rotate(int[] nums, int k) {
+        // 输入: nums = [1,2,3,4,5,6,7], k = 3
+        //输出: [5,6,7,1,2,3,4]
+        if (k <= 0 || nums.length <= 1 ) {
+            return;
+        }
+        if (k >= nums.length) {
+            k = k % nums.length;
+        }
+        int[] firstArr = new int[nums.length - k];
+        int[] kArr = new int[k];
+
+        int index = 0;
+        int kIndex = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i >= firstArr.length) {
+                kArr[kIndex++] = nums[i];
+            } else {
+                firstArr[index++] = nums[i];
+            }
+        }
+        index = 0;
+        kIndex = 0;
+        for (int i = 0; i < nums.length; i++) {
+          if (i < kArr.length) {
+              nums[i] = kArr[kIndex++];
+          } else {
+              nums[i] = firstArr[index++];
+          }
+        }
+    }
+
+    // 三次翻转
+    public void rotate2(int[] nums, int k) {
+        // 输入: nums = [1,2,3,4,5,6,7], k = 3
+        //输出: [5,6,7,1,2,3,4]
+        if (k <= 0 || nums.length <= 1 ) {
+            return;
+        }
+        if (k >= nums.length) {
+            k = k % nums.length;
+        }
+        reverse(nums, 0, nums.length - 1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, nums.length - 1);
+    }
+
+    private void reverse(int[] nums, int start, int end) {
+        while (start < end) {
+            int tmp = nums[end];
+            nums[end] = nums[start];
+            nums[start] = tmp;
+            start++;
+            end--;
+        }
+    }
+
     @Test
     public void testMethod() {
-        int[] arr = {0,1,0,3,12};
-        String s = "aaaaaaaaaa";
-        String p = "aaaaaaaaaaaaa";
-        List<Integer> anagrams = findAnagrams(s, p);
-        System.out.println("anagrams = " + anagrams);
+
+
+        int[] arr = {1, 2};
+        rotate(arr, 3);
     }
 }
