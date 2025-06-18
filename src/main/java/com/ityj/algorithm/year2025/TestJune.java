@@ -6,7 +6,6 @@ import java.util.*;
 
 public class TestJune {
 
-
     // 1. 两数之和
     public int[] twoSum(int[] nums, int target) {
         int[] resultIndex = new int[2];
@@ -76,17 +75,17 @@ public class TestJune {
             return 1;
         }
         int max = 0;
-        Set<Integer> set = new HashSet<>();
+        Set<Integer> set = new HashSet<>();  // 并没有从小到大排序， [1,2,3,100,4,200]
         for (int num : nums) {
             set.add(num);
         }
 
         for (int num : set) {
-            // 当x-1在集合中时，直接continue，即可
+            // 当x-1在集合中时，直接continue，即可  --> 比如当前是2， 里面有更小的1 所以12连续，按1来计算
             if (set.contains(num - 1)) {
                 continue;
             }
-            // 当x-1不在集合中时，说明在x这个值断开了，那么重新计算x往后的连续序列，并和之前的比较。
+            // 当x-1不在集合中时，说明在x可以作为第一个值来计算最长连续区间。重新计算x往后的连续序列，并和之前的比较。
             int y = num + 1;
             while (set.contains(y)) {
                 y++;
@@ -325,11 +324,56 @@ public class TestJune {
         }
     }
 
+    // 238. 除自身以外数组的乘积
+    // tech: 数组分成两半，双指针处理，维护两个数组计算对应左边和右边的值
+    public int[] productExceptSelf(int[] nums) {
+        int[] result = new int[nums.length];
+        int leftMultiple = 1;
+        int rightMultiple = 1;
+        int leftIndex = 1;
+        int rightIndex = nums.length - 2;
+        int[] leftSumArr = new int[nums.length];
+        leftSumArr[0] = 1;
+        int[] rightSumArr = new int[nums.length];
+        rightSumArr[nums.length - 1] = 1;
+        while (true) {
+            if (leftIndex > nums.length - 1) {
+                break;
+            }
+            leftSumArr[leftIndex] = leftMultiple * nums[leftIndex - 1];
+            leftMultiple = leftSumArr[leftIndex];
+            leftIndex++;
+            rightSumArr[rightIndex] = rightMultiple * nums[rightIndex + 1];
+            rightMultiple = rightSumArr[rightIndex];
+            rightIndex--;
+        }
+        for (int i = 0; i < result.length; i++) {
+            result[i] = leftSumArr[i] *rightSumArr[i];
+        }
+        return result;
+    }
+
+    // 41. 缺失的第一个正数
+    public int firstMissingPositive(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        int result = 1;
+        for (int num : nums) {
+            set.add(num);
+        }
+        for (int i = 1; i < nums.length + 1; i++) {
+            result = i;
+            if (!set.contains(i)) {
+                return result;
+            }
+        }
+        return result + 1;
+    }
+
     @Test
     public void testMethod() {
 
 
-        int[] arr = {1, 2};
-        rotate(arr, 3);
+        int[] arr = {2, 1};
+        firstMissingPositive(arr);
     }
 }
