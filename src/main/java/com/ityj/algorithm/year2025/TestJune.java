@@ -1,5 +1,6 @@
 package com.ityj.algorithm.year2025;
 
+import com.ityj.algorithm.entity.ListNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -354,6 +355,7 @@ public class TestJune {
     }
 
     // 41. 缺失的第一个正数
+    // 数字是从1开始连续的，排序后找到不连续的即可
     public int firstMissingPositive(int[] nums) {
         Set<Integer> set = new HashSet<>();
         int result = 1;
@@ -369,9 +371,97 @@ public class TestJune {
         return result + 1;
     }
 
-    @Test
-    public void testMethod() {
+    // 160. 相交链表
+    // tech Node相等可以用equals()判断
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        Set<ListNode> set = new HashSet<>();
+        set.add(headA);
+        ListNode nextA = headA.next;
+        while (true) {
+            if (nextA == null) {
+                break;
+            }
+            set.add(nextA);
+            nextA = nextA.next;
+        }
 
+        ListNode nextB = headB;
+        while (true) {
+            if (nextB == null) {
+                break;
+            }
+            if (set.contains(nextB)) {
+                return nextB;
+            }
+            nextB = nextB.next;
+        }
+        return null;
+    }
+
+    // 206. 反转链表
+    // tech 链接中断，双指针
+    public ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode pre = null;
+        ListNode current = head;
+        while (true) {
+            if (current == null) {
+                break;
+            }
+            ListNode temp = current.next;
+            current.next = pre;
+            pre = current;
+            current = temp;
+        }
+        return pre;
+    }
+
+
+    public ListNode reverseList2(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        return reverse(null, head);
+    }
+
+    private ListNode reverse(ListNode pre, ListNode current) {
+        if (current == null) {
+            return pre;
+        }
+        ListNode tmp = current.next;
+        current.next = pre;
+        pre = current;
+        return reverse(pre, tmp);
+    }
+
+    // 234. 回文链表  todo
+    public boolean isPalindrome(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        ListNode reverse = reverseList(head);
+        while (true) {
+
+            if (reverse == null || head == null) {
+                break;
+            }
+            if (reverse.val != head.val) {
+                return false;
+            }
+            reverse = reverse.next;
+            head = head.next;
+        }
+        return true;
+
+    }
+
+
+    @Test
+    public void testMethod() throws Throwable {
+        System.gc();
+        finalize();
 
         int[] arr = {2, 1};
         firstMissingPositive(arr);
