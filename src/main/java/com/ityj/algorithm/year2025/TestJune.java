@@ -4,6 +4,7 @@ import com.ityj.algorithm.entity.ListNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TestJune {
 
@@ -436,25 +437,297 @@ public class TestJune {
         return reverse(pre, tmp);
     }
 
-    // 234. 回文链表  todo
+    // 234. 回文链表   将val放入List中
     public boolean isPalindrome(ListNode head) {
         if (head == null) {
             return false;
         }
-        ListNode reverse = reverseList(head);
-        while (true) {
-
-            if (reverse == null || head == null) {
-                break;
-            }
-            if (reverse.val != head.val) {
-                return false;
-            }
-            reverse = reverse.next;
+        List<Integer> list = new ArrayList<>();
+        list.add(head.val);
+        head = head.next;
+        while (head != null) {
+            list.add(head.val);
             head = head.next;
         }
+        for (int i = 0; i < list.size() / 2; i++) {
+            if (!list.get(i).equals(list.get(list.size() - i - 1))) {
+                return false;
+            }
+        }
         return true;
+    }
 
+    private ListNode frontNode;
+    // 递归实现从后到前遍历
+    public boolean isPalindrome2(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        frontNode = head;
+        return recursivelyCheck(head);
+    }
+
+    private boolean recursivelyCheck(ListNode current) {
+        if (current != null) {
+             if (!recursivelyCheck(current.next)) {
+                 return false;
+             }
+             if (frontNode.val != current.val) {
+                return false;
+             }
+             frontNode = frontNode.next;
+        }
+        return true;
+    }
+
+    // 141. 环形链表
+    // 有环说明存在节点被遍历两次
+    public boolean hasCycle(ListNode head) {
+        Set<ListNode> set = new HashSet<>();
+        while (head != null) {
+            if (!set.add(head)) {
+                return true;
+            }
+            head = head.next;
+        }
+        return false;
+    }
+
+    // 快慢指针， 如果有环一定会在环里相遇
+    public boolean hasCycle2(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode slowNode = head.next;
+        ListNode fastNode = head.next.next;
+
+        while (true) {
+            if (fastNode == null || slowNode == null) {
+                return false;
+            }
+            if (slowNode.equals(fastNode)) {
+                return true;
+            }
+            slowNode = slowNode.next;
+            fastNode = fastNode.next;
+            if (fastNode == null) {
+                return false;
+            }
+            fastNode = fastNode.next;
+        }
+    }
+
+    // 142. 环形链表 II
+    public ListNode detectCycle(ListNode head) {
+        Set<ListNode> set = new HashSet<>();
+        while (head != null) {
+            if (!set.add(head)) {
+                return head;
+            }
+            head = head.next;
+        }
+        return null;
+    }
+
+    // 快慢指针
+    // 快慢指针相遇时 快走了2k 慢走了k
+    // 加入一个newPtr, newPtr走k，那么slow也又走了k  --> 此时一定相遇(slow k/fast 2k时相遇的)
+    // 此时相遇了， 但是不用一定是初次相遇。可能一起走了好几步
+    // 因为两者的速度一样，所以相遇点一定是环的入口
+    public ListNode detectCycle2(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (true) {
+            if (fast == null || slow == null) {
+                // 不是环
+                return null;
+            }
+            slow = slow.next;
+            fast = fast.next;
+            if (fast == null) {
+                // 不是环
+                return null;
+            }
+            fast = fast.next;
+            if (fast != null && slow != null && fast.equals(slow)) {
+                // 相遇了
+                ListNode newPtr = head;
+                while (true) {
+                    if (newPtr.equals(slow)) {
+                        // 环的入口
+                        return newPtr;
+                    }
+                    newPtr = newPtr.next;
+                    slow = slow.next;
+                }
+            }
+        }
+    }
+
+    // 21. 合并两个有序链表
+    // 强行解决
+    //组装一个顺序的list
+    //根据list组装一个Node
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        List<Integer> list = new ArrayList<>();
+        while (true) {
+            if (list1 == null) {
+                break;
+            }
+            list.add(list1.val);
+            list1 = list1.next;
+        }
+
+        while (true) {
+            if (list2 == null) {
+                break;
+            }
+            list.add(list2.val);
+            list2 = list2.next;
+        }
+        if (list.isEmpty()) {
+            return null;
+        }
+        System.out.println(list.size());
+        list = list.stream().sorted().collect(Collectors.toList());
+        System.out.println(list);
+        return buildNode(list);
+    }
+
+    private ListNode buildNode(List<Integer> list) {
+        ListNode tailNode = new ListNode(list.get(list.size() - 1));
+        for (int i = list.size() - 2; i >= 0 ; i--) {
+            ListNode current = new ListNode(list.get(i));
+            current.next = tailNode;
+            tailNode = current;
+        }
+        return tailNode;
+    }
+
+    private ListNode buildNode2(List<Integer> list) {
+        ListNode tmpNode = new ListNode(-1);
+        ListNode prev = tmpNode;
+        for (Integer num : list) {
+            prev.next = new ListNode(num);
+            prev = prev.next;
+        }
+        return tmpNode.next;
+    }
+
+    // 递归
+    public ListNode mergeTwoLists2(ListNode list1, ListNode list2) {
+        if (list1 == null) {
+            return list2;
+        }
+        if (list2 == null) {
+            return list1;
+        }
+        if (list1.val > list2.val) {
+            list2.next = mergeTwoLists2(list2.next, list1);
+            return list2;
+        } else {
+            list1.next = mergeTwoLists2(list1.next, list2);
+            return list1;
+        }
+    }
+
+    public ListNode mergeTwoLists3(ListNode list1, ListNode list2) {
+        if (list1 == null) {
+            return list2;
+        }
+        if (list2 == null) {
+            return list1;
+        }
+        ListNode tmp = new ListNode(-1);
+        ListNode prev = tmp;
+        while (true) {
+            if (list1 == null || list2 == null) {
+                break;
+            }
+            if (list1.val > list2.val) {
+                prev.next = list2;
+                list2 = list2.next;
+            } else {
+                prev.next = list1;
+                list1 = list1.next;
+            }
+            prev = prev.next;
+        }
+
+        prev.next = list1 == null ? list2 : list1;
+        return tmp.next;
+    }
+
+    // 2. 两数相加
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode tmpNode = new ListNode(-1);
+        ListNode prev = tmpNode;
+
+        int tmpNum = 0;
+        while (true) {
+            if ((l1 == null && l2 == null) && tmpNum == 0) {
+                break;
+            }
+            if (l1 == null) {
+                l1 = new ListNode(0);
+            }
+            if (l2 == null) {
+                l2 = new ListNode(0);
+            }
+            int sum = l1.val + l2.val + tmpNum;
+            tmpNum = sum / 10;
+            l1 = l1.next;
+            l2 = l2.next;
+            prev.next = new ListNode(sum % 10);
+            prev = prev.next;
+        }
+        return tmpNode.next;
+    }
+
+    // 19. 删除链表的倒数第 N 个结点
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int num = 1;
+        while (head != null) {
+            map.put(num++, head.val);
+            head = head.next;
+        }
+        ListNode tmpNode = new ListNode();
+        ListNode prev = tmpNode;
+        int target = map.size() - n + 1;
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+            if (key == target) {
+                continue;
+            }
+            prev.next = new ListNode(value);
+            prev = prev.next;
+        }
+        return tmpNode.next;
+    }
+
+    // 直接对要删除的节点进行解绑
+    public ListNode removeNthFromEnd2(ListNode head, int n) {
+        int length = getLength(head);
+        ListNode tmpNode = new ListNode(-1, head);
+        ListNode prev = tmpNode;
+        int targetIndex = length - n;
+        for (int i = 0; i < targetIndex; i++) {
+            prev = prev.next;
+        }
+        prev.next = prev.next.next;
+        return tmpNode.next;
+    }
+
+    private int getLength(ListNode head) {
+        int length = 0;
+        while (head != null) {
+            length++;
+            head = head.next;
+        }
+        return length;
     }
 
 
