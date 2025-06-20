@@ -399,6 +399,34 @@ public class TestJune {
         return null;
     }
 
+    // 两个链表右边对齐，对其后一个一个对比即可
+    public ListNode getIntersectionNode2(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        int lengthA = getLength(headA);
+        int lengthB = getLength(headB);
+        if (lengthA > lengthB) {
+            for (int i = 0; i < lengthA - lengthB; i++) {
+                headA = headA.next;
+            }
+        } else {
+            for (int i = 0; i < lengthB - lengthA; i++) {
+                headB = headB.next;
+            }
+        }
+        while (true) {
+            if (headA == null || headB == null) {
+                return null;
+            }
+            if (headA.equals(headB)) {
+                return headA;
+            }
+            headA = headA.next;
+            headB = headB.next;
+        }
+    }
+
     // 206. 反转链表
     // tech 链接中断，双指针
     public ListNode reverseList(ListNode head) {
@@ -730,9 +758,63 @@ public class TestJune {
         return length;
     }
 
+    // 24. 两两交换链表中的节点
+    // https://www.bilibili.com/video/BV1YT411g7br?spm_id_from=333.788.videopod.sections&vd_source=b23569b676ce26126febad3c290b16e8
+
+    // dummyHead -> 1 -> 2 -> 3 -> 4 -> 5 -> null
+    //  (1)dummyHead指向 2， 此时1和3都已经断开了，链表无意义。所以需要将1和3暂存起来   dummyHead -> 2
+    //  (2) dummyHead -> 2 -> 1
+    //  (3) dummyHead -> 2 -> 1 -> 3 -> 4 -> 5 -> null
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode curr = dummyHead;
+        while (curr.next != null && curr.next.next != null) {
+            ListNode node1 = curr.next;
+            ListNode node2 = curr.next.next.next;
+
+            curr.next = curr.next.next;
+            curr.next.next = node1;
+            node1.next = node2;
+            curr = curr.next.next;
+        }
+        return dummyHead.next;
+    }
+
+    // 148. 排序链表
+    // dummyHead -> 3 -> 2 -> 1 -> 5 -> 9 -> null
+    // 超时了 todo
+    public ListNode sortList(ListNode head) {
+        if (head ==null || head.next == null) {
+            return head;
+        }
+        int length = getLength(head);
+
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode curr = dummyHead;
+        for (int i = 0; i < length - 1; i++) {
+            while (curr.next != null && curr.next.next != null) {
+                ListNode tempNode = curr.next;
+                ListNode tempNode2 = curr.next.next.next;
+                if (curr.next.val > curr.next.next.val) {
+                    curr.next = curr.next.next;
+                    curr.next.next = tempNode;
+                    tempNode.next = tempNode2;
+                }
+                curr = curr.next;
+            }
+            curr = dummyHead;
+        }
+        return dummyHead.next;
+    }
+
 
     @Test
     public void testMethod() throws Throwable {
+        int num = 15 & 66;
+        System.out.println("num = " + num);
+
         System.gc();
         finalize();
 
