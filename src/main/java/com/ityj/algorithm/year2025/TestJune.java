@@ -809,6 +809,44 @@ public class TestJune {
         return dummyHead.next;
     }
 
+    // 1 -> 2 -> 3 -> 4
+    public ListNode reverseList33(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode curr = null;
+        while (head != null) {
+            ListNode tmp = head;
+            head = head.next;
+            tmp.next = curr;
+            curr = tmp;
+        }
+        return curr;
+    }
+
+    // 169. 多数元素
+    // hash
+    public int majorityElement(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.compute(num, (k, v) -> (v == null) ? 1 : map.get(num) + 1);
+            if (map.get(num) * 2 > nums.length) {
+                return num;
+            }
+        }
+        return -1;
+    }
+
+    // 1, 2, 2, 2
+    // 1, 2, 3, 3, 3
+    // 存在这个数， 那么index = length / 2 一定是
+    public int majorityElement2(int[] nums) {
+        Arrays.sort(nums);
+        return nums[nums.length / 2];
+    }
+
+
+
 
     @Test
     public void testMethod() throws Throwable {
