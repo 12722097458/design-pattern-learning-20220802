@@ -1,6 +1,7 @@
 package com.ityj.algorithm.year2025;
 
 import com.ityj.algorithm.entity.ListNode;
+import com.ityj.algorithm.entity.TreeNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -845,7 +846,68 @@ public class TestJune {
         return nums[nums.length / 2];
     }
 
+    // 94. 二叉树的中序遍历
+    // 左 根 右
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        middle(result, root);
+        return result;
+    }
 
+    private void middle(List<Integer> result, TreeNode curr) {
+        if (curr == null) {
+            return;
+        }
+        middle(result, curr.left);
+        result.add(curr.val);
+        middle(result, curr.right);
+    }
+
+    // 104. 二叉树的最大深度
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftHeight = maxDepth(root.left);
+        int rightHeight = maxDepth(root.right);
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    // 226. 翻转二叉树
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+
+    // 101. 对称二叉树
+    public boolean isSymmetric(TreeNode root) {
+        return check(root.left, root.right);
+    }
+
+    private boolean check(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left == null || right == null) {
+            return false;
+        }
+        return left.val == right.val && check(left.left, right.right) && check(left.right, right.left);
+    }
+
+    // 543. 二叉树的直径
+    public int diameterOfBinaryTree(TreeNode root) {
+        int result = 0;
+
+
+        return result;
+    }
 
 
     @Test
