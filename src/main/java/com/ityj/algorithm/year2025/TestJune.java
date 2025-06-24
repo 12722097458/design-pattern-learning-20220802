@@ -1090,6 +1090,59 @@ public class TestJune {
         return resultArr;
     }
 
+    public static List<Long> getPerfectNumber(Long start, Long end) {
+        List<Long> result = new ArrayList<>();
+        assert start > 0;
+        assert end > start;
+        while (start <= end) {
+            long sum = 0L;
+            for (int i = 1; i < start; i++) {
+                if (start % i == 0) {
+                    sum += i;
+                }
+                if (sum > start) {
+                    break;
+                }
+            }
+            if (sum == start) {
+                result.add(start);
+            }
+
+            start++;
+        }
+
+        return result;
+    }
+
+
+    // 一个数的因子就是所有可以整除这个数的数，不包括这个数自身。比如，6的因子是1，2，3
+    //一个数如果恰好等于它的因子之和，这个数就称为“完数“。 例如6=1＋2＋3
+    //请编写一个函数，入参是一个正整数n，返回值是0到n之间（闭区间）的完数的个数
+
+    public static List<Integer> getPerfectNumber2(int n) {
+        List<Integer> result = new ArrayList<>();
+        if (n <= 1) {
+            return result;
+        }
+        // 筛选法计算真因子
+        int[] factorSum = new int[n + 1]; // 0 - n  索引0到n
+        // 找到i是谁的因子
+        for (int i = 1; i <= n / 2; i++) {
+            // 2i 3i 4i 5i
+            for (int j = 2 * i; j <= n; j = j + i) {
+                factorSum[j] = factorSum[j] + i;  // 计算因子之和
+            }
+        }
+
+        for (int i = 2; i < factorSum.length; i++) {
+            if (factorSum[i] == i) {
+                result.add(factorSum[i]);
+            }
+        }
+        System.out.println("factorSum = " + Arrays.toString(factorSum));
+        return result;
+    }
+
 
 
 
@@ -1098,5 +1151,8 @@ public class TestJune {
         int[] arr = {3, 4, -1, 1};
         int i = firstMissingPositive2(arr);
         System.out.println("i = " + i);
+
+        List<Integer> perfectNumber = getPerfectNumber2(6);
+        System.out.println("perfectNumber = " + perfectNumber);
     }
 }
