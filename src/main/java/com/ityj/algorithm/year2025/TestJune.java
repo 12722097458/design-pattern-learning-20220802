@@ -1143,6 +1143,43 @@ public class TestJune {
         return result;
     }
 
+    // 75. 颜色分类
+    // [2,0,2,1,1,0]
+    public void sortColors(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < nums.length - 1; j++) {
+                if (nums[j] > nums[j + 1]) {
+                    int tmp = nums[j + 1];
+                    nums[j + 1] = nums[j];
+                    nums[j] = tmp;
+                }
+            }
+        }
+
+    }
+
+    // [2,0,2,1,1,0]
+    // 单指针
+    public void sortColors2(int[] nums) {
+        int ptr = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                int tmp = nums[i];
+                nums[i] = nums[ptr];
+                nums[ptr] = tmp;
+                ptr++;
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 1) {
+                int tmp = nums[i];
+                nums[i] = nums[ptr];
+                nums[ptr] = tmp;
+                ptr++;
+            }
+        }
+    }
+
 
 
 
