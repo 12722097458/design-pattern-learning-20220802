@@ -901,7 +901,7 @@ public class TestJune {
         return left.val == right.val && check(left.left, right.right) && check(left.right, right.left);
     }
 
-    // 543. 二叉树的直径
+    // 543. 二叉树的直径 todo
     public int diameterOfBinaryTree(TreeNode root) {
         int result = 0;
 
@@ -909,16 +909,194 @@ public class TestJune {
         return result;
     }
 
+    public int firstMissingPositive2(int[] nums) {
+        boolean oneExist = false;
+        for (int num : nums) {
+            if (num == 1) {
+                oneExist = true;
+                break;
+            }
+        }
+        if (!oneExist) {
+            return 1;
+        }
+
+        int maxValue = nums.length;
+        // set <=0 and > n to 1
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= 0 || nums[i] > maxValue) {
+                nums[i] = 1;
+            }
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            int value = nums[i];
+            int index = Math.abs(value) - 1;
+            nums[index] = -Math.abs(nums[index]);  // -1 refer to exist
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                return i + 1;
+            }
+        }
+        return maxValue + 1;
+    }
+
+    // 1 -> 2 -> 2 -> 1
+    private ListNode palindrome22LeftNode = new ListNode(-1);
+    public boolean isPalindrome22(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        palindrome22LeftNode = head;
+        return checkIsPalindrome22(head);
+    }
+
+    private boolean checkIsPalindrome22(ListNode curr) {
+        if (curr != null) {
+            if (!checkIsPalindrome22(curr.next)) {
+                return false;
+            }
+            if (palindrome22LeftNode.next.val != curr.val) {
+                return false;
+            }
+            palindrome22LeftNode = palindrome22LeftNode.next;
+        }
+        return true;
+    }
+
+    public ListNode mergeTwoLists22(ListNode list1, ListNode list2) {
+        if (list1 == null && list2 == null) {
+            return null;
+        }
+        if (list1 == null) {
+            return list2;
+        }
+        if (list2 == null) {
+            return list1;
+        }
+        ListNode dummyHead = new ListNode(-1);
+        ListNode curr = dummyHead;
+        while (true) {
+            if (list1.val <= list2.val) {
+                ListNode tmp = list1;
+                list1 = list1.next;
+                curr.next = tmp;
+                curr = curr.next;
+            } else {
+                ListNode tmp = list2;
+                list2 = list2.next;
+                curr.next = tmp;
+                curr = curr.next;
+            }
+            if (list1 == null) {
+                curr.next = list2;
+                break;
+            }
+            if (list2 == null) {
+                curr.next = list1;
+                break;
+            }
+
+        }
+        return dummyHead.next;
+    }
+
+    // 删除倒数第n个节点
+    // 双指针
+    public ListNode removeNthFromEnd222(ListNode head, int n) {
+        if (head == null || n < 0) {
+            return head;
+        }
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode left = dummyHead;
+        ListNode right = head;
+        for (int i = 0; i < n; i++) {
+            right = right.next;
+        }
+        while (true) {
+            if (right == null) {
+                break;
+            }
+            left = left.next;
+            right = right.next;
+        }
+        if (left.next != null) {
+            left.next = left.next.next;
+        }
+        return dummyHead;
+    }
+
+    // 560. 和为 K 的子数组
+    public int subarraySum(int[] nums, int k) {
+        int result = 0;
+
+        
+
+
+
+        return result;
+    }
+
+    // 73. 矩阵置零
+    public void setZeroes(int[][] matrix) {
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return;
+        }
+        boolean[] rows = new boolean[matrix.length];
+        boolean[] columns = new boolean[matrix[0].length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] == 0) {
+                    rows[i] = true;
+                    columns[j] = true;
+                }
+            }
+        }
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (rows[i] || columns[j]) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+
+
+    // 239. 滑动窗口最大值  todo
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length < k) {
+            return null;
+        }
+        int[] resultArr = new int[nums.length - k + 1];
+        int index = 1;
+        List<Integer> subList = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (i < k - 1) {
+                subList.add(nums[i]);
+            } else if (i == k - 1) {
+                subList.add(nums[i]);
+                Integer max = subList.stream().max(Comparator.comparingInt(o -> o)).get();
+                resultArr[0] = max;
+            } else if (i > k - 1) {
+                subList.remove(0);
+                subList.add(nums[i]);
+                Integer max = subList.stream().max(Comparator.comparingInt(o -> o)).get();
+                resultArr[index++] = max;
+            }
+        }
+        return resultArr;
+    }
+
+
+
 
     @Test
     public void testMethod() throws Throwable {
-        int num = 15 & 66;
-        System.out.println("num = " + num);
-
-        System.gc();
-        finalize();
-
-        int[] arr = {2, 1};
-        firstMissingPositive(arr);
+        int[] arr = {3, 4, -1, 1};
+        int i = firstMissingPositive2(arr);
+        System.out.println("i = " + i);
     }
 }
