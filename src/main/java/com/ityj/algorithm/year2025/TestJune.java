@@ -1180,16 +1180,161 @@ public class TestJune {
         }
     }
 
+    // 35. 搜索插入位置
+    public int searchInsert(int[] nums, int target) {
+        for (int i = 0; i < nums.length; i++) {
+            if (target == nums[i]) {
+                return i;
+            } else {
+                if (nums[i] > target) {
+                    return i;
+                }
+            }
+        }
+        return nums.length;
+    }
+
+    // 二分查找
+    // [1,3,5,6]   2
+    //  0,1,2,3
+    public int searchInsert2(int[] nums, int target) {
+        int leftIndex = 0;
+        int rightIndex = nums.length - 1;
+        while (true) {
+            if (leftIndex > rightIndex) {
+                break;
+            }
+            int middleIndex = (leftIndex + rightIndex) / 2;
+            int middleValue = nums[middleIndex];
+            if (middleValue < target) {
+                leftIndex = middleIndex + 1;
+            } else if (middleValue == target) {
+                return middleIndex;
+            } else {
+                rightIndex = middleIndex - 1;
+            }
+        }
+        return leftIndex;
+    }
+
+    // 74. 搜索二维矩阵
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int columnIndex = findTargetColumnIndex(matrix, target);
+        System.out.println("columnIndex = " + columnIndex);
+        return findTargetRow(matrix[columnIndex], target);
+    }
+
+    private boolean findTargetRow(int[] row, int target) {
+        int left = 0;
+        int right = row.length - 1;
+        while (left > right) {
+            int middleIndex = (left + right) / 2;
+            int value = row[middleIndex];
+            if (value == target) {
+                return true;
+            }
+            if (value < target) {
+                left = middleIndex + 1;
+            } else {
+                right = middleIndex - 1;
+            }
+        }
+        return false;
+    }
+
+    private int findTargetColumnIndex(int[][] matrix, int target) {
+        int left = 0;
+        int right = matrix.length - 1;
+        while (true) {
+            if (left > right) {
+                break;
+            }
+            int middleIndex = (left + right) / 2;
+            int value = matrix[middleIndex][0];
+            if (target < value) {
+                left = middleIndex + 1;
+            } else if (target == value) {
+                return middleIndex;
+            } else {
+                right = middleIndex - 1;
+            }
+        }
+        return left;
+    }
+
+    // 20. 有效的括号
+    public boolean isValid(String s) {
+        Map<Character, Character> map = new HashMap<>();
+        map.put(')', '(');
+        map.put(']', '[');
+        map.put('}', '{');
+
+        Stack<Character> stack = new Stack<>();
+        for (char ch : s.toCharArray()) {
+            if (!map.containsKey(ch)) {
+                // 左括号
+                stack.push(ch);
+            } else {
+                // 右括号
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                Character pop = stack.pop();
+                if (pop != map.get(ch)) {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    // 394. 字符串解码  todo
+    // 输入：s = "2[abc]3[cd]ef"
+    //输出："abcabccdcdcdef"
+    public String decodeString(String s) {
+        Stack<Character> stack = new Stack<>();
+        for (char ch : s.toCharArray()) {
+            stack.push(ch);
+        }
+
+        StringBuilder reversedStr = new StringBuilder();
+        StringBuilder reversedTmpStr = new StringBuilder();
+        boolean strFlag = false;
+        while (true) {
+            if (stack.isEmpty()) {
+                break;
+            }
+            Character pop = stack.pop();
+            if (pop == ']') {
+                strFlag = true;
+                continue;
+            } else if (pop == '[') {
+                strFlag = false;
+                continue;
+            } else if (Character.isDigit(pop)) {
+                for (int i = 0; i < pop - '0'; i++) {
+                    reversedStr.append(reversedTmpStr);
+                }
+                reversedTmpStr = new StringBuilder();
+                continue;
+            }
+            if (strFlag) {
+                reversedTmpStr.append(pop);
+            } else {
+                reversedStr.append(pop);
+            }
+        }
+        return reversedStr.reverse().toString();
+    }
 
 
 
     @Test
     public void testMethod() throws Throwable {
         int[] arr = {3, 4, -1, 1};
-        int i = firstMissingPositive2(arr);
-        System.out.println("i = " + i);
+        String str = "3[a]2[bc]";
+        String s = decodeString(str);
+        System.out.println("s = " + s);
 
-        List<Integer> perfectNumber = getPerfectNumber2(6);
-        System.out.println("perfectNumber = " + perfectNumber);
     }
 }
