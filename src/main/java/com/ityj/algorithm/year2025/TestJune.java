@@ -1436,13 +1436,25 @@ public class TestJune {
         return result;
     }
 
-
-
-        @Test
+    @Test
     public void testMethod() throws Throwable {
-        int[] arr = {-1,0,1,2,-1,-4};
-        List<List<Integer>> lists = threeSum222(arr);
-        System.out.println("lists = " + lists);
+    int[] arr = {-1,0,1,2,-1,-4};
+    List<List<Integer>> lists = threeSum222(arr);
+    System.out.println("lists = " + lists);
+        String s = try_catch_finally();
+        System.out.println("s = " + s);
 
+    }
+
+    // 返回值为 return_value_1
+    public static String try_catch_finally() {
+        String string = "return_value_1";
+        try {
+            System.out.println(111);
+            return string;
+        } finally {
+            string = "return_value_2";
+            System.out.println("string = " + string);
+        }
     }
 }
