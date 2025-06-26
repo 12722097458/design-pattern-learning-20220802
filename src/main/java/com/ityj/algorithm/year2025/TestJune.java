@@ -175,11 +175,6 @@ public class TestJune {
         return maxArea;
     }
 
-    // 15. 三数之和   指针 beyond my ability
-    public List<List<Integer>> threeSum(int[] nums) {
-        return null;
-    }
-
     // 3. 无重复字符的最长子串
     public int lengthOfLongestSubstring(String s) {
         int result = 0;
@@ -1327,14 +1322,127 @@ public class TestJune {
         return reversedStr.reverse().toString();
     }
 
+    public ListNode mergeTwoLists2222(ListNode list1, ListNode list2) {
+        ListNode dummyHead = new ListNode(-1);
+        ListNode curr = dummyHead;
+        while (true) {
+            if (list1 == null || list2 == null) {
+                break;
+            }
+            if (list1.val < list2.val) {
+                ListNode tmp = list1;
+                list1 = list1.next;
+                curr.next = tmp;
+                curr = curr.next;
+            } else {
+                ListNode tmp = list2;
+                list2 = list2.next;
+                curr.next = tmp;
+                curr = curr.next;
+            }
+        }
+        if (list1 == null) {
+            curr.next = list2;
+        } else {
+            curr.next = list1;
+        }
+        return dummyHead.next;
+    }
+
+    // [100,4,200,1,3,2]
+    public int longestConsecutive_test(int[] nums) {
+        int max = 0;
+        if (nums == null || nums.length == 0) {
+            return max;
+        }
+
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
+        for (Integer num : set) {
+            // num -1 如果存在，说明不是最合适的
+            if (set.contains(num - 1)) {
+                continue;
+            }
+            int count = 1;
+            while (true) {
+                if (!set.contains(++num)) {
+                    max = Math.max(max, count);
+                    break;
+                } else{
+                    // ++num存在 继续判断
+                    count++;
+                }
+            }
+        }
+        return max;
+    }
+
+    public TreeNode invertTree_test(TreeNode root) {
+        if (root == null) {
+            return root;
+        }
+        TreeNode left = invertTree_test(root.left);
+        TreeNode right = invertTree_test(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+
+    // 15. 三数之和
+    // -1,0,1,2,-1,-4
+    // -4,-1,-1,0,1,2
+    public List<List<Integer>> threeSum222(int[] nums) {
+        if (nums == null || nums.length <= 2) {
+            return null;
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int left = i + 1;
+            int right = nums.length - 1;
+            int num = nums[i];
+            while (true) {
+                if (left >= right) {
+                    break;
+                }
+                int twoSum = nums[left] + nums[right];
+                if (num + twoSum == 0) {
+                    List<Integer> list = new ArrayList<>();
+                    list.add(num);
+                    list.add(nums[left]);
+                    list.add(nums[right]);
+                    result.add(list);
+                    left++;
+                    right--;
+                    // 删除重复元素
+                    while (left < right && nums[left] == nums[left - 1]) {
+                        left++;
+                    }
+                    while (left < right && nums[right] == nums[right + 1]) {
+                        right--;
+                    }
+                } else if (num + twoSum < 0) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        return result;
+    }
 
 
-    @Test
+
+        @Test
     public void testMethod() throws Throwable {
-        int[] arr = {3, 4, -1, 1};
-        String str = "3[a]2[bc]";
-        String s = decodeString(str);
-        System.out.println("s = " + s);
+        int[] arr = {-1,0,1,2,-1,-4};
+        List<List<Integer>> lists = threeSum222(arr);
+        System.out.println("lists = " + lists);
 
     }
 }
