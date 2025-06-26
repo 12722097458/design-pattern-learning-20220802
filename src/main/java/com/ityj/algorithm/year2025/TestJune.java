@@ -1,6 +1,7 @@
 package com.ityj.algorithm.year2025;
 
 import com.ityj.algorithm.entity.ListNode;
+import com.ityj.algorithm.entity.Student;
 import com.ityj.algorithm.entity.TreeNode;
 import org.junit.jupiter.api.Test;
 
@@ -1443,6 +1444,11 @@ public class TestJune {
     System.out.println("lists = " + lists);
         String s = try_catch_finally();
         System.out.println("s = " + s);
+        Student student = try_catch_finally222();
+        System.out.println("final student = " + student);
+
+        String s1 = try_catch_finally2223();
+        System.out.println("s1 = " + s1);
 
     }
 
@@ -1455,6 +1461,30 @@ public class TestJune {
         } finally {
             string = "return_value_2";
             System.out.println("string = " + string);
+        }
+    }
+
+    public static Student try_catch_finally222() {
+        Student s = new Student();
+        s.setName("AAA");
+        try {
+            System.out.println(s);
+            return s;
+        } finally {
+            s.setName("Updated");
+            System.out.println("s = " + s);
+        }
+    }
+
+    public static String try_catch_finally2223() {
+        Student s = new Student();
+        s.setName("AAA");
+        try {
+            System.out.println(s);
+            return s.getName();
+        } finally {
+            s.setName("Updated");
+            System.out.println("s = " + s);
         }
     }
 }
