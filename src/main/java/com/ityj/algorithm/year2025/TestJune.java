@@ -1437,13 +1437,68 @@ public class TestJune {
         return result;
     }
 
+    // 121. 买卖股票的最佳时机
+    public int maxProfit(int[] prices) {
+        int[] rightMaxArr = new int[prices.length];
+        int index = prices.length - 1;
+        int max = prices[index];
+        while (index >= 0) {
+            int curr = prices[index];
+            max = Math.max(max, curr);
+            rightMaxArr[index] = max;
+            index--;
+        }
+
+        int result = 0;
+        for (int i = 0; i < prices.length; i++) {
+            result = Math.max(result, rightMaxArr[i] - prices[i]);
+        }
+        return result;
+    }
+
+    // 一次遍历
+    public int maxProfit22(int[] prices) {
+        int result = 0;
+        int minPrice = prices[0];
+        for (int curr : prices) {
+            if (curr < minPrice) {
+                minPrice = curr;
+            } else if (curr - minPrice > result) {
+                result = curr - minPrice;
+            }
+        }
+        return result;
+    }
+
+    // 70. 爬楼梯
+    // f(n) = f(n - 1) + f(n - 2)
+    public int climbStairs(int n) {
+        int[] arr = new int[n + 1];
+        return climb(n, arr);
+    }
+
+    private int climb(int n, int[] arr) {
+        if (arr[n] > 0) {
+            return arr[n];
+        }
+        if (n == 1) {
+            arr[n] = 1;
+        } else if (n == 2) {
+            arr[n] = 2;
+        } else {
+            arr[n] = climb(n - 1, arr) + climb(n - 2, arr);
+        }
+        return arr[n];
+    }
+
+
     @Test
     public void testMethod() throws Throwable {
     int[] arr = {-1,0,1,2,-1,-4};
     List<List<Integer>> lists = threeSum222(arr);
     System.out.println("lists = " + lists);
         String s = try_catch_finally();
-        System.out.println("s = " + s);
+        System.out.println("final 实参 s = " + s);
         Student student = try_catch_finally222();
         System.out.println("final student = " + student);
 
