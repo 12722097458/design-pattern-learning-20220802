@@ -1491,8 +1491,249 @@ public class TestJune {
         return arr[n];
     }
 
+    // head = [1,2,3,4]
+    public ListNode swapPairs_test(ListNode head) {
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode curr = dummyHead;
+        while (dummyHead.next != null && dummyHead.next.next != null) {
+            ListNode temp = curr.next;
+            ListNode temp2 = curr.next.next.next;
 
-    @Test
+            curr.next = curr.next.next;
+            head.next.next = temp;
+            temp.next = temp2;
+            curr = curr.next.next;
+        }
+        return dummyHead.next;
+    }
+
+    public ListNode getIntersectionNode_test(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        int lengthA = getLength(headA);
+        int lengthB = getLength(headB);
+
+        // A长
+        if (lengthA > lengthB) {
+            int diff = lengthA - lengthB;
+            for (int i = 0; i < diff; i++) {
+                headA = headA.next;
+            }
+        } else {
+            int diff = lengthB - lengthA;
+            for (int i = 0; i < diff; i++) {
+                headB = headB.next;
+            }
+        }
+        while (true) {
+            // 任何一个指向null， 就是没有相交
+            if (headA == null || headB == null) {
+                return null;
+            }
+            if (headA.equals(headB)) {
+                return headA;
+            }
+            headA = headA.next;
+            headB = headB.next;
+        }
+    }
+
+    // 1-> 2 -> 3 -> 4 -> null
+    public ListNode reverseList_test(ListNode head) {
+        ListNode curr = null;
+        while (head != null) {
+            ListNode tmp = head;
+            head = head.next;
+            tmp.next = curr;
+            curr = tmp;
+        }
+        return curr;
+     }
+
+    // 1,2,2,1
+    private ListNode front = null;
+    public boolean isPalindrome_test(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        front = head;
+        return checkPalindrome(head);
+    }
+
+    private boolean checkPalindrome(ListNode curr) {
+        if (curr != null) {
+            if (!checkPalindrome(curr.next)) {
+                return false;
+            }
+            if (curr.val != front.val) {
+                return false;
+            }
+            front = front.next;
+        }
+        return true;
+    }
+
+    public boolean hasCycle_test(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode slow = head.next;
+        ListNode fast = head.next.next;
+
+        while (true) {
+            // 如果没有环，fast一定会先结束
+            if (fast == null || fast.next == null) {
+                return false;
+            }
+            // 快慢相遇
+            if (slow.equals(fast)) {
+                return true;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+    }
+
+    public ListNode detectCycle_test(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+        ListNode slow = head.next;
+        ListNode fast = head.next.next;
+
+        while (true) {
+            // 如果没有环，fast一定会先结束
+            if (fast == null || fast.next == null) {
+                return null;
+            }
+            // 快慢相遇
+            if (slow.equals(fast)) {
+                ListNode tmp = head;
+                while (true) {
+                    if (tmp.equals(slow)) {
+                        return tmp;
+                    }
+                    tmp = tmp.next;
+                    slow = slow.next;
+                }
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+    }
+
+    public ListNode mergeTwoLists_test(ListNode list1, ListNode list2) {
+        ListNode dummyHead = new ListNode(-1);
+        ListNode curr = dummyHead;
+
+        while (true) {
+            if (list1 == null || list2 == null) {
+                break;
+            }
+            if (list1.val < list2.val) {
+                ListNode tmp = list1;
+                list1 = list1.next;
+                curr.next = tmp;
+                curr = curr.next;
+            } else {
+                ListNode tmp = list2;
+                list2 = list2.next;
+                curr.next = tmp;
+                curr = curr.next;
+            }
+        }
+        if (list1 == null) {
+            curr.next = list2;
+        } else {
+            curr.next = list1;
+        }
+        return dummyHead.next;
+    }
+
+    public ListNode addTwoNumbers_test(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        ListNode dummyHead = new ListNode(-1);
+        ListNode curr = dummyHead;
+        int tmp = 0;
+        while (true) {
+            if (l1 == null && l2 == null) {
+                break;
+            }
+            int l1Val = l1 == null ? 0 : l1.val;
+            int l2Val = l2 == null ? 0 : l2.val;
+            curr.next = new ListNode((l1Val + l2Val + tmp) % 10);
+            tmp = (l1Val + l2Val + tmp) / 10;
+            curr = curr.next;
+            l1 = l1 == null ? null : l1.next;
+            l2 = l2 == null ? null : l2.next;
+        }
+        if (tmp != 0) {
+            curr.next = new ListNode(tmp);
+        }
+        return dummyHead.next;
+    }
+
+    public ListNode removeNthFromEnd_test(ListNode head, int n) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode curr = dummyHead;
+        for (int i = 0; i < n; i++) {
+            head = head.next;
+        }
+
+        if (head == null) {
+            // skip first
+            curr.next = curr.next.next;
+            return dummyHead.next;
+        }
+        while (true) {
+            if (head.next == null) {
+                // 切断下一个node
+                curr.next.next = curr.next.next.next;
+                break;
+            }
+            curr = curr.next;
+            head = head.next;
+        }
+        return dummyHead.next;
+    }
+
+    public ListNode swapPairs_test2(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode pre = dummyHead;
+
+        while (true) {
+            if (pre.next == null || pre.next.next == null) {
+                break;
+            }
+            ListNode tmp = pre.next;
+            ListNode tmp2 = pre.next.next.next;
+            pre.next = pre.next.next;
+            pre.next.next = tmp;
+            tmp.next = tmp2;
+            pre = pre.next.next;
+        }
+        return dummyHead.next;
+    }
+
+
+
+        @Test
     public void testMethod() throws Throwable {
     int[] arr = {-1,0,1,2,-1,-4};
     List<List<Integer>> lists = threeSum222(arr);
