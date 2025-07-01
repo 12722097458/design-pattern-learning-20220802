@@ -1731,6 +1731,49 @@ public class TestJune {
         return dummyHead.next;
     }
 
+    public ListNode reverseList_test2(ListNode head) {
+        ListNode pre = null;
+        while (head != null) {
+            ListNode tmp = head;
+            head = head.next;
+            tmp.next = pre;
+            pre = tmp;
+        }
+        return pre;
+    }
+
+    public int firstMissingPositive_test(int[] nums) {
+        int result = -1;
+        // 看1是否存在'
+        boolean oneExist = false;
+        for (int num : nums) {
+            if (num == 1) {
+                oneExist = true;
+            }
+        }
+        if (!oneExist) {
+            return 1;
+        }
+        int n = nums.length;
+        // set to 1 if  <=0 and >nums.length
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= 0 || nums[i] > n) {
+                nums[i] = 1;
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            int index = Math.abs(nums[i]);
+            nums[index - 1] = -Math.abs(nums[index - 1]);
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                result = i + 1;
+                break;
+            }
+        }
+        return result == -1 ? n + 1 : result;
+    }
+
 
 
         @Test
