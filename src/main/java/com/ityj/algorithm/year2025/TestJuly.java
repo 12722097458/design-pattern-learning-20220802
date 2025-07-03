@@ -107,9 +107,245 @@ public class TestJuly {
         return arr[n];
     }
 
-    @Test
-    public void testMethod() throws Throwable {
-        int[] arr = {-1,0,1,2,-1,-4};
+    // [0,1,0,3,12]
+    public void moveZeroes(int[] nums) {
+        int left = 0;
+        int right = 0;
+        while (true) {
+            if (left > right || right > nums.length - 1) {
+                break;
+            }
+            if (nums[right] != 0) {
+                int tmp = nums[right];
+                nums[right] = nums[left];
+                nums[left] = tmp;
+                left++;
+                right++;
+            } else {
+                right++;
+            }
+        }
     }
+
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length - 1;
+        int max = 0;
+
+        while (true) {
+            if (left > right) {
+                break;
+            }
+            int leftHeight = height[left];
+            int rightHeight = height[right];
+            int area = (right - left) * Math.min(leftHeight, rightHeight);
+            max = Math.max(area, max);
+            if (leftHeight > rightHeight) {
+                right--;
+            } else {
+                left++;
+            }
+        }
+        return max;
+    }
+
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums.length < 3) {
+            return result;
+        }
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i != 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int first = nums[i];
+
+            int left = i + 1;
+            int right = nums.length - 1;
+
+            while (true) {
+                if (left >= right) {
+                    break;
+                }
+                int leftValue = nums[left];
+                int rightValue = nums[right];
+                if (leftValue + rightValue + first == 0) {
+                    List<Integer> list = new ArrayList<>();
+                    list.add(first);
+                    list.add(leftValue);
+                    list.add(rightValue);
+                    result.add(list);
+                    left++;
+                    right--;
+                    while (true) {
+                        if (left < right && nums[left] == nums[left - 1]) {
+                            left++;
+                        } else {
+                            break;
+                        }
+                    }
+                    while (true) {
+                        if (left < right && nums[right] == nums[right + 1]) {
+                            right--;
+                        } else {
+                            break;
+                        }
+                    }
+                } else if (leftValue + rightValue + first > 0) {
+                    right--;
+                } else {
+                    left++;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    public int firstMissingPositive(int[] nums) {
+        int result = 1;
+        if (nums == null) {
+            return result;
+        }
+        boolean oneExist = false;
+        for (int num : nums) {
+            if (num == 1) {
+                oneExist = true;
+                break;
+            }
+        }
+        if (!oneExist) {
+            return result;
+        }
+
+        int n = nums.length;
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > n || nums[i] <= 0) {
+                nums[i] = 1;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            int value = Math.abs(nums[i]);
+            nums[value - 1] = -Math.abs(nums[value - 1]);
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                result = i + 1;
+                break;
+            }
+        }
+        return result == 1 ? n + 1 : result;
+    }
+
+    public void setZeroes(int[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) {
+            return;
+        }
+        boolean[] rows = new boolean[matrix.length];
+        boolean[] columns = new boolean[matrix[0].length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == 0) {
+                    rows[i] = true;
+                    columns[j] = true;
+                }
+            }
+        }
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (rows[i] || columns[j]) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    public ListNode swapPairs_test(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode cur = dummyHead;
+
+        while (true) {
+            if (cur.next == null || cur.next.next == null) {
+                break;
+            }
+            ListNode tmp = cur.next;
+            ListNode tmp2 = cur.next.next.next;
+            cur.next = cur.next.next;
+            cur.next.next = tmp;
+            tmp.next = tmp2;
+            cur = tmp;
+        }
+        return dummyHead.next;
+    }
+
+    // 92. 反转链表 II
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        if (head == null) {
+            return head;
+        }
+        int count = 0;
+        ListNode dummyHead = new ListNode(-1);
+        ListNode leftNode = dummyHead;
+        ListNode middleNode = null;
+        while (true) {
+            if (head == null) {
+                break;
+            }
+            count++;
+            System.out.println("count = " + count);
+            if (count < left) {
+                leftNode.next = head;
+                leftNode = leftNode.next;
+                head = head.next;
+            } else if (left <= count && count <= right) {
+                ListNode tmp = head;
+                head = head.next;
+                tmp.next = middleNode;
+                middleNode = tmp;
+                System.out.println("middleNode = " + middleNode.val);
+            } else {
+                break;
+            }
+        }
+
+        if (middleNode == null) {
+            while (head != null) {
+                leftNode.next = head;
+                head = head.next;
+                leftNode = leftNode.next;
+            }
+        } else {
+            while (middleNode != null) {
+                System.out.println("middleNode.val = " + middleNode.val);
+                leftNode.next = middleNode;
+                middleNode = middleNode.next;
+                leftNode = leftNode.next;
+            }
+            while (head != null) {
+                leftNode.next = head;
+                head = head.next;
+                leftNode = leftNode.next;
+            }
+        }
+        return dummyHead.next;
+    }
+
+
+        @Test
+    public void testMethod() throws Throwable {
+        // [-10, -5, -5, -4, -4, -3, -2, -2, 0, 0, 1, 2, 2, 2, 2, 5, 5]
+        int[] arr = {2,-3,0,-2,-5,-5,-4,1,2,-2,2,0,2,-4,5,5,-10};
+            List<List<Integer>> lists = threeSum(arr);
+            System.out.println("lists = " + lists);
+        }
 
 }
