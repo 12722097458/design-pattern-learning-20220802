@@ -364,6 +364,54 @@ public class TestJuly {
         return winner;
     }
 
+    public ListNode swapPairs_test2(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode cur = dummyHead;
+        while (true) {
+            if (cur.next == null || cur.next.next == null) {
+                break;
+            }
+            ListNode tmp = cur.next;
+            ListNode tmp2 = cur.next.next.next;
+            cur.next = cur.next.next;
+            cur.next.next = tmp;
+            tmp.next = tmp2;
+            cur = tmp;
+        }
+        return dummyHead.next;
+    }
+
+    public int majorityElement_test(int[] nums) {
+        if (nums == null) {
+            return -1;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+
+        int count = 1;
+        int winner = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            int value = nums[i];
+            if (value == winner) {
+                count++;
+            } else {
+                count--;
+                if (count == 0) {
+                    winner = value;
+                    count = 1;
+                }
+            }
+        }
+        return winner;
+    }
+
 
         @Test
     public void testMethod() throws Throwable {
