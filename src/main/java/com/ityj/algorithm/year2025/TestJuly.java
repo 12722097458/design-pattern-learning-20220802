@@ -412,13 +412,67 @@ public class TestJuly {
         return winner;
     }
 
+    // 560. 和为 K 的子数组
+    public int subarraySum(int[] nums, int k) {
+        if (nums == null) {
+            return 0;
+        }
+        int result = 0;
+
+        int left = 0;
+        int right = 0;
+        int sum = 0;
+        while (true) {
+            if (left >= nums.length) {
+                break;
+            }
+            sum += nums[right];
+            right++;
+            if (sum == k) {
+                result++;
+            }
+            if (right >= nums.length) {
+                sum = 0;
+                left++;
+                right = left;
+            }
+        }
+        return result;
+    }
+
+    public static int countOccurrences(String str, String subStr) {
+        if (str == null || subStr == null || str.isEmpty() || subStr.isEmpty()) {
+            return 0;
+        }
+        if (subStr.length() > str.length()) {
+            return 0;
+        }
+        int result = 0;
+        int left = 0;
+        int right = subStr.length();
+        while (true) {
+            if (right > str.length()) {
+                break;
+            }
+            String cur = str.substring(left, right);
+            if (subStr.equals(cur)) {
+                result++;
+            }
+            left++;
+            right++;
+        }
+        return result;
+    }
+
 
         @Test
     public void testMethod() throws Throwable {
-        // [-10, -5, -5, -4, -4, -3, -2, -2, 0, 0, 1, 2, 2, 2, 2, 5, 5]
-        int[] arr = {2,-3,0,-2,-5,-5,-4,1,2,-2,2,0,2,-4,5,5,-10};
-            List<List<Integer>> lists = threeSum(arr);
-            System.out.println("lists = " + lists);
+        int[] arr = {1, 1, 1};
+        int i = subarraySum(arr, 2);
+        System.out.println("i = " + i);
+
+        int i1 = countOccurrences("abababab", "ab");
+        System.out.println("i1 = " + i1);
         }
 
 }
