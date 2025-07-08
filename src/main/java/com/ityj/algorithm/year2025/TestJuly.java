@@ -464,6 +464,27 @@ public class TestJuly {
         return result;
     }
 
+    public ListNode swapPairs_test8(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode cur = dummyHead;
+        while (true) {
+            if (cur.next == null || cur.next.next == null) {
+                break;
+            }
+            ListNode tmp = cur.next;
+            ListNode tmp2 = cur.next.next.next;
+            cur.next = cur.next.next;
+            cur.next.next = tmp;
+            tmp.next = tmp2;
+            cur = tmp;
+        }
+        return dummyHead.next;
+    }
+
 
         @Test
     public void testMethod() throws Throwable {
