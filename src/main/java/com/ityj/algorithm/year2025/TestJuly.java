@@ -485,15 +485,50 @@ public class TestJuly {
         return dummyHead.next;
     }
 
+    //39. 组合总和
+    // 回溯算法
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        backtracking(candidates, result, list, target, 0, 0);
+        return result;
+    }
 
-        @Test
+    private void backtracking(int[] candidates, List<List<Integer>> result, List<Integer> tmp, int target, int sum, int fromIndex) {
+        if (sum > target) {
+            return;
+        }
+        System.out.println("tmp = " + tmp);
+
+        if (sum == target) {
+
+            result.add(new ArrayList<>(tmp));   // 这样 tmp 保存的是组合的瞬时快照，后续回溯不影响已保存的结果。
+            return;
+        }
+
+        for (int i = fromIndex; i < candidates.length; i++) {
+            System.out.println("sum = " + sum);
+            tmp.add(candidates[i]);
+            backtracking(candidates, result, tmp, target, sum + candidates[i], i);  // sum + candidates[i] 不能作为临时变量放前面
+            System.out.println("remove last tmp = " + tmp);
+            tmp.remove(tmp.size() - 1);
+        }
+    }
+
+
+    @Test
     public void testMethod() throws Throwable {
         int[] arr = {1, 1, 1};
         int i = subarraySum(arr, 2);
         System.out.println("i = " + i);
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        list.add(13);
+        list.add(14);
+        result.add(list);
 
-        int i1 = countOccurrences("abababab", "ab");
-        System.out.println("i1 = " + i1);
+        System.out.println("list = " + list);
+        System.out.println("result = " + result);
         }
 
 }
