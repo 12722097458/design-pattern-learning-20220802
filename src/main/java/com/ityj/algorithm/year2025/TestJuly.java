@@ -515,6 +515,108 @@ public class TestJuly {
         }
     }
 
+    public List<List<Integer>> threeSum_test10(int[] nums) {
+        if (nums == null || nums.length < 3) {
+            return null;
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(nums);
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            // 重复
+            if (i != 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int left = i + 1;
+            int right = nums.length - 1;
+            int first = nums[i];
+            while (true) {
+                if (left >= right) {
+                    break;
+                }
+                if (first + nums[left] + nums[right] == 0) {
+                    List<Integer> list = new ArrayList<>();
+                    list.add(first);
+                    list.add(nums[left]);
+                    list.add(nums[right]);
+                    result.add(list);
+                    left++;
+                    right--;
+                    // 去重
+                    while (true) {
+                        if (left < right && nums[left] == nums[left - 1]) {
+                            left++;
+                        } else {
+                            break;
+                        }
+                    }
+                    while (true) {
+                        if (left < right && nums[right] == nums[right + 1]) {
+                            right--;
+                        } else {
+                            break;
+                        }
+                    }
+                } else if (first + nums[left] + nums[right] < 0) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        return result;
+    }
+
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+
+        ListNode dummyHead = head;
+        ListNode curr = dummyHead;
+
+
+        for (int i = 0; i < n; i++) {
+            head = head.next;
+            if (head == null) {
+                // 删除倒数第size个元素， 就是删除第一个。
+                return dummyHead.next;
+            }
+        }
+
+        while (true) {
+            if (head.next == null) {
+                // 断开下一个
+                curr.next = curr.next.next;
+                break;
+            } else {
+                head = head.next;
+                curr = curr.next;
+            }
+        }
+        return dummyHead;
+    }
+
+    public List<List<Integer>> combinationSum_test10(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(candidates);
+        List<Integer> tmpList = new ArrayList<>();
+        backtracking_test10(candidates, target, 0, 0, tmpList, result);
+        return result;
+    }
+
+    private void backtracking_test10(int[] candidates, int target, int sum, int fromIndex, List<Integer> tmpList, List<List<Integer>> result) {
+        if (sum >= target) {
+            if (sum == target) {
+                result.add(new ArrayList<>(tmpList));
+            }
+            return;
+        }
+        for (int i = fromIndex; i < candidates.length; i++) {
+
+            tmpList.add(candidates[i]);
+            backtracking_test10(candidates, target, sum + candidates[i], i, tmpList, result);
+            tmpList.remove(tmpList.size() - 1);
+        }
+    }
+
 
     @Test
     public void testMethod() throws Throwable {
