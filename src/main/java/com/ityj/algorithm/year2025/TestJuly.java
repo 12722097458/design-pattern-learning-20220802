@@ -617,6 +617,108 @@ public class TestJuly {
         }
     }
 
+    public int searchInsert_test11(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+        int result = -1;
+        int left = 0;
+        int right = nums.length - 1;
+        while (true) {
+            if (left > right) {
+                break;
+            }
+            int middle = (left + right) / 2;
+            if (target == nums[middle]) {
+                result = middle;
+                break;
+            } else if (nums[middle] < target) {
+                left = middle + 1;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return (result == -1) ? left : result;
+    }
+
+    public int majorityElement_test11(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+        int count = 1;
+        int winner = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == winner) {
+                count++;
+            } else {
+                count--;
+                if (count == 0) {
+                    winner = nums[i];
+                    count = 1;
+                }
+            }
+        }
+        return winner;
+    }
+
+
+    public List<List<Integer>> combinationSum_test11(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> tmpList = new ArrayList<>();
+        backtracking_test11(candidates, target, result, tmpList, 0, 0);
+        return result;
+    }
+
+    private void backtracking_test11(int[] candidates, int target, List<List<Integer>> result, List<Integer> tmpList, int sum, int fromIndex) {
+        if (sum >= target) {
+            if (sum == target) {
+                result.add(new ArrayList<>(tmpList));
+            }
+            return;
+        }
+        for (int i = fromIndex; i < candidates.length; i++) {
+            tmpList.add(candidates[i]);
+            backtracking_test11(candidates, target, result, tmpList, sum + candidates[i], i);
+            tmpList.remove(tmpList.size() - 1);
+        }
+    }
+
+    // LCR 034. 验证外星语词典
+    public boolean isAlienSorted(String[] words, String order) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < order.length(); i++) {
+            map.put(order.charAt(i), i);
+        }
+
+        String[] tmp = new String[words.length];
+        for (int i = 0; i < words.length; i++) {
+            tmp[i] = words[i];
+        }
+        Arrays.sort(words, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                int count = Math.min(o1.length(), o2.length());
+                for (int i = 0; i < count; i++) {
+                    char c1 = o1.charAt(i);
+                    char c2 = o2.charAt(i);
+                    if (c1 == c2) {
+                        continue;
+                    } else {
+                        return map.get(c1) - map.get(c2);
+                    }
+                }
+                return o1.length() - o2.length();
+            }
+        });
+        System.out.println("words = " + Arrays.asList(words));
+        for (int i = 0; i < tmp.length; i++) {
+            if (tmp[i] != words[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     @Test
     public void testMethod() throws Throwable {
