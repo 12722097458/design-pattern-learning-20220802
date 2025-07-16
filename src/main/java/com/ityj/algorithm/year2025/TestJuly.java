@@ -719,20 +719,39 @@ public class TestJuly {
         return true;
     }
 
+    private void shuffle(Integer[] nums) {
+        int num = (int) (-0.6);  // 在Java中，使用`(int)`进行强制类型转换时，对于浮点数，它会将小数部分直接截断（即向零取整）。这与`Math.floor()`（向负无穷取整）和`Math.ceil()`（向正无穷取整）不同
+        System.out.println("num = " + num);
+        Arrays.sort(nums, (o1, o2) -> (int) Math.floor(Math.random() - 0.5));
+        System.out.println(Arrays.asList(nums));
+    }
+
+    public List<List<Integer>> combinationSum_test16(int[] candidates, int target) {
+        List<List<Integer> > result = new ArrayList<>();
+        List<Integer> tmp = new ArrayList<>();
+        backtracking_test16(candidates, target, result, tmp, 0, 0);
+        return result;
+    }
+
+    private void backtracking_test16(int[] candidates, int target, List<List<Integer>> result, List<Integer> tmp, int sum, int fromIndex) {
+        if (sum >= target) {
+            if (sum == target) {
+                result.add(new ArrayList<>(tmp));
+            }
+            return;
+        }
+        for (int i = fromIndex; i < candidates.length; i++) {
+            tmp.add(candidates[fromIndex]);
+            backtracking_test16(candidates, target, result, tmp, sum + candidates[i], i);
+            tmp.remove(tmp.size() - 1);
+        }
+    }
+
 
     @Test
     public void testMethod() throws Throwable {
-        int[] arr = {1, 1, 1};
-        int i = subarraySum(arr, 2);
-        System.out.println("i = " + i);
-        List<List<Integer>> result = new ArrayList<>();
-        List<Integer> list = new ArrayList<>();
-        list.add(13);
-        list.add(14);
-        result.add(list);
-
-        System.out.println("list = " + list);
-        System.out.println("result = " + result);
-        }
+        Integer[] arr = {66, 1, 2, 4, 3, 5, 6, 7, 8};
+        shuffle(arr);
+    }
 
 }
