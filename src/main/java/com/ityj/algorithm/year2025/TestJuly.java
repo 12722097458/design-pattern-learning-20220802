@@ -748,7 +748,86 @@ public class TestJuly {
     }
 
 
-    @Test
+    // 1 -> 4 -> 2 -> 5 -> 9
+    public ListNode swapPairs_test21(ListNode head) {
+
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode pre = dummyHead;
+
+        while (true) {
+            if (pre.next == null || pre.next.next == null) {
+                break;
+            }
+            ListNode tmp1 = pre.next;
+            ListNode tmp2 = pre.next.next.next;
+            pre.next = pre.next.next;
+            pre.next.next = tmp1;
+            tmp1.next = tmp2;
+            pre = tmp1;
+        }
+        return dummyHead.next;
+    }
+
+
+    public List<List<Integer>> combinationSum_test21(int[] candidates, int target) {
+
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> tmpList = new ArrayList<>();
+        backtracking_test21(candidates, target, result, tmpList, 0, 0);
+        return result;
+    }
+
+    private void backtracking_test21(int[] candidates, int target, List<List<Integer>> result, List<Integer> tmpList, int sum, int fromIndex) {
+
+        if (sum >= target) {
+            if (sum == target) {
+                result.add(new ArrayList<>(tmpList));
+            }
+            return;
+        }
+
+        for (int i = fromIndex; i < candidates.length; i++) {
+
+            tmpList.add(candidates[i]);
+            backtracking_test21(candidates, target, result, tmpList, sum + candidates[i], i);
+            tmpList.remove(tmpList.size() - 1);
+        }
+    }
+
+    // 1 3 5 6 7  --> 9
+    // 1 3 5 6   --> 2
+    public int searchInsert_test21(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int result = -1;
+        int left = 0;
+        int right = nums.length - 1;
+
+        while (true) {
+            if (left > right) {
+                break;
+            }
+            int middle = (left + right) / 2;
+            if (nums[middle] == target) {
+                result = middle;
+                break;
+            } else if (nums[middle] < target) {
+                left = middle + 1;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return result == -1 ? left : result;
+    }
+
+
+        @Test
     public void testMethod() throws Throwable {
         Integer[] arr = {66, 1, 2, 4, 3, 5, 6, 7, 8};
         shuffle(arr);
