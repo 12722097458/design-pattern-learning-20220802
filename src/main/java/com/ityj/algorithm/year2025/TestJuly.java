@@ -826,11 +826,301 @@ public class TestJuly {
         return result == -1 ? left : result;
     }
 
+    // 100,4,200,1,3,2
+    public int longestConsecutive_test30(int[] nums) {
+        int max = 0;
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
 
-        @Test
-    public void testMethod() throws Throwable {
-        Integer[] arr = {66, 1, 2, 4, 3, 5, 6, 7, 8};
-        shuffle(arr);
+        for (Integer num : set) {
+            // 去从更小的数找
+            if (set.contains(num - 1)) {
+                continue;
+            }
+            int count = 1;
+            while (true) {
+                if (set.contains(++num)) {
+                    count++;
+                } else {
+                    max = Math.max(count, max);
+                    break;
+                }
+            }
+        }
+        return max;
     }
+
+    public List<List<Integer>> threeSum_test31(int[] nums) {
+        // nums = [-1,0,1,2,-1,-4]
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 2; i++) {
+            int first = nums[i];
+            if (i != 0 && first == nums[i - 1]) {
+                // 避免重复
+                continue;
+            }
+            int left = i + 1;
+            int right = nums.length - 1;
+
+            while (true) {
+                if (left >= right) {
+                    break;
+                }
+                if (first + nums[left] + nums[right] == 0) {
+                    List<Integer> data = new ArrayList<>();
+                    data.add(first);
+                    data.add(nums[left]);
+                    data.add(nums[right]);
+                    result.add(data);
+                    left++;
+                    right--;
+                    while (true) {
+                        if (left < right && nums[left] == nums[left - 1]) {
+                            left++;
+                        } else {
+                            break;
+                        }
+                    }
+                    while (true) {
+                        if (left < right && nums[right] == nums[right + 1]) {
+                            right--;
+                        } else {
+                            break;
+                        }
+                    }
+                } else if (first + nums[left] + nums[right] < 0) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    // 输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+    //输出：[[1,6],[8,10],[15,18]]
+    public int[][] merge_0731(int[][] intervals) {
+        if (intervals == null || intervals.length == 0 || intervals.length == 1) {
+            return intervals;
+        }
+
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0] - o2[0];
+            }
+        });
+
+        List<int[]> data = new ArrayList<>();
+        int[] tmp = intervals[0];
+        data.add(tmp);
+        for (int i = 1; i < intervals.length; i++) {
+            int[] curr = intervals[i];
+            if (curr[0] > tmp[1]) {
+                // 断开
+                tmp = curr;
+                data.add(tmp);
+            } else {
+                tmp[1] = Math.max(tmp[1], curr[1]);
+            }
+        }
+
+        return data.stream().toArray(int[][]::new);
+    }
+
+    public int firstMissingPositive_test0731(int[] nums) {
+        boolean oneExist = false;
+        for (int num : nums) {
+            if (num == 1) {
+                oneExist = true;
+                break;
+            }
+        }
+        if (!oneExist) {
+            return 1;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= 0 || nums[i] > nums.length ) {
+                nums[i] = 1;
+            }
+        }
+
+        for (int num : nums) {
+            int index = Math.abs(num);
+            nums[index - 1] = -Math.abs(nums[index - 1]);
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                return i + 1;
+            }
+        }
+        return nums.length + 1;
+    }
+
+
+    private ListNode frontHead = new ListNode(-1);
+    public boolean isPalindrome_test0731(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        frontHead.next = head;
+        return check0731(head);
+    }
+
+    private boolean check0731(ListNode head) {
+        System.out.println(head.val);
+        if (head != null) {
+            if (!check0731(head.next)) {
+                return false;
+            }
+            if (head.val != frontHead.next.val) {
+                return false;
+            }
+            frontHead = frontHead.next;
+        }
+        return true;
+    }
+
+
+    // 输入：head = [1,2,3,4]
+    //输出：[2,1,4,3]
+    public ListNode swapPairs_test0731(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode pre = dummyHead;
+        while (true) {
+            if (pre.next == null || pre.next.next == null) {
+                break;
+            }
+            ListNode tmp = pre.next;
+            ListNode tmp2 = pre.next.next.next;
+
+            pre.next = pre.next.next;
+            pre.next.next = tmp;
+            tmp.next = tmp2;
+            pre = tmp;
+        }
+
+        return dummyHead.next;
+    }
+
+    public List<List<Integer>> combinationSum_test0731(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> tmpList = new ArrayList<>();
+        backTracking_test0731(candidates, target, result, tmpList, 0, 0);
+        return result;
+    }
+
+    private void backTracking_test0731(int[] candidates, int target, List<List<Integer>> result, List<Integer> tmpList,
+                                       int sum, int fromIndex) {
+
+        if (sum >= target) {
+            if (sum == target) {
+                result.add(new ArrayList<>(tmpList));
+            }
+            return;
+        }
+
+        for (int i = fromIndex; i < candidates.length; i++) {
+
+            tmpList.add(candidates[i]);
+            backTracking_test0731(candidates, target, result, tmpList, sum + candidates[i], i);
+            tmpList.remove(tmpList.size() - 1);
+        }
+    }
+
+
+    // 输入: nums = [1,3,5,6], target = 5
+    public int searchInsert_test0731(int[] nums, int target) {
+
+        int left = 0;
+        int right = nums.length - 1;
+        while (true) {
+            if (left > right) {
+                break;
+            }
+            int middle = (left + right) / 2;
+            if (nums[middle] == target) {
+                return middle;
+            } else if (nums[middle] < target) {
+                left = middle + 1;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return left;
+    }
+
+    public int maxProfit(int[] prices) {
+        if (prices == null) {
+            return -1;
+        }
+
+        int max = 0;
+        int lowestPrice = prices[0];
+        for (int price : prices) {
+            if (price < lowestPrice) {
+                lowestPrice = price;
+            } else {
+                max = Math.max(max, price - lowestPrice);
+            }
+        }
+        return max;
+    }
+
+    public int majorityElement_test0731(int[] nums) {
+        if (nums == null) {
+            return -1;
+        }
+        int winner = nums[0];
+        int count = 1;
+        for (int num : nums) {
+            if (num == winner) {
+                count++;
+            } else {
+                count--;
+                if (count < 1) {
+                    winner = num;
+                    count = 1;
+                }
+            }
+        }
+        return winner;
+    }
+
+    public int climbStairs_Test0731(int n) {
+        int[] arr = new int[n];
+        return climb_0731(arr, n);
+    }
+
+    private int climb_0731(int[] arr, int n) {
+        if (arr[n - 1] != 0) {
+            return arr[n - 1];
+        }
+        if (n == 1) {
+            arr[n - 1] = 1;
+        } else if (n == 2) {
+            arr[n - 1] = 2;
+        } else {
+            arr[n - 1] = climb_0731(arr, n -1) + climb_0731(arr, n - 2);
+        }
+        return arr[n - 1];
+    }
+
+
+    @Test
+    public void testMethod() throws Throwable {
+        int[] arr = {1, 2, 0};
+            int i = firstMissingPositive_test0731(arr);
+        }
 
 }
