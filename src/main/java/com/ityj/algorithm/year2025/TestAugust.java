@@ -3,9 +3,7 @@ package com.ityj.algorithm.year2025;
 import com.ityj.algorithm.entity.ListNode;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class TestAugust {
 
@@ -206,11 +204,75 @@ public class TestAugust {
         return left;
     }
 
+    // 78. 子集
+    //
+    //输入：nums = [1,2,3]
+    //输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> list = new ArrayList<>();
+        List<Integer> tmpList = new ArrayList<>();
+        sub(nums, list, tmpList, 0);
+        return list;
+    }
 
-        @Test
+    private void sub(int[] nums, List<List<Integer>> result, List<Integer> tmpList, int fromIndex) {
+        result.add(new ArrayList<>(tmpList));
+        for (int i = fromIndex; i < nums.length; i++) {
+            tmpList.add(nums[i]);
+            sub(nums, result, tmpList, i + 1);
+            tmpList.remove(tmpList.size() - 1);
+        }
+    }
+
+    // 17. 电话号码的字母组合   todo
+    public List<String> letterCombinations(String digits) {
+        Map<Character, List<Character>> map = new HashMap<>();
+        map.put('2', List.of('a', 'b', 'c'));
+        map.put('3', List.of('d', 'e', 'f'));
+        map.put('4', List.of('g', 'h', 'i'));
+        map.put('5', List.of('j', 'k', 'l'));
+        map.put('6', List.of('m', 'n', 'o'));
+        map.put('7', List.of('p', 'q', 'r', 's'));
+        map.put('8', List.of('t', 'u', 'v'));
+        map.put('9', List.of('w', 'x', 'y', 'z'));
+        char[] charArray = digits.toCharArray();
+        List<List<Character>> dataList = new ArrayList<>();
+        for (char ch : charArray) {
+            dataList.add(map.get(ch));
+        }
+        System.out.println("dataList = " + dataList);
+        List<String> result = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+
+        letterCombin(dataList, result, sb, 0);
+        return result;
+    }
+
+    private void letterCombin(List<List<Character>> dataList, List<String> result, StringBuilder sb, int fromIndex) {
+        // 如果输入三个数字，那么每个数字都需要有一个字母
+        if (dataList.size() == fromIndex) {
+            result.add(new String(sb));
+        } else {
+            List<Character> letters = dataList.get(fromIndex);
+
+            for (int i = fromIndex; i < letters.size(); i++) {
+                sb.append(letters.get(i));
+                letterCombin(dataList, result, sb, i + 1);
+                sb.deleteCharAt(sb.length() - 1);
+            }
+        }
+    }
+
+
+    @Test
     public void test1() {
         int[] nums = {-4,-1,-1,0,1,2};
-        List<List<Integer>> lists = threeSum_test13(nums);
-        System.out.println("lists = " + lists);
+
+        char ch = 'a';
+        char chA = 'A';
+
+        System.out.println((byte)ch);
+        System.out.println((byte)chA);
+
     }
 }
