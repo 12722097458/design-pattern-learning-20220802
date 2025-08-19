@@ -1,4 +1,4 @@
-package com.ityj.tech.copy;
+package com.ityj.demo.tech.copy;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

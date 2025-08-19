@@ -1,4 +1,4 @@
-package com.ityj.design.memory;
+package com.ityj.demo.memory;
 
 import lombok.Data;
 

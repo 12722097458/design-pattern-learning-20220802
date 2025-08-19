@@ -1,4 +1,4 @@
-package com.ityj.tech.threadlocal;
+package com.ityj.demo.tech.threadlocal;
 
 import lombok.extern.slf4j.Slf4j;
 

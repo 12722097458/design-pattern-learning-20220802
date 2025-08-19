@@ -1,4 +1,4 @@
-package com.ityj.design.memory;
+package com.ityj.demo.memory;
 
 import com.carrotsearch.sizeof.RamUsageEstimator;
 import org.junit.jupiter.api.Test;

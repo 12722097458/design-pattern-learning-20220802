@@ -1,4 +1,4 @@
-package com.ityj.tech.copy;
+package com.ityj.demo.tech.copy;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
