@@ -263,16 +263,118 @@ public class TestAugust {
         }
     }
 
+    // 239. 滑动窗口最大值
+    //  队首 1,2,3  队尾
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k > nums.length) {
+            return null;
+        }
+        int[] result = new int[nums.length - k + 1];
+        int index = 0;
+        // 维护一个 递减链表
+        LinkedList<Integer> queue = new LinkedList<>();
 
-    @Test
-    public void test1() {
-        int[] nums = {-4,-1,-1,0,1,2};
+        for (int i = 0; i < k; i++) {
+            while (!queue.isEmpty() && nums[i] > queue.peekLast()) {
+                queue.removeLast();
+            }
+            queue.offerLast(nums[i]);  //放队尾
+        }
+        result[index++] = queue.peekFirst();
 
-        char ch = 'a';
-        char chA = 'A';
+        for (int i = k; i < nums.length; i++) {
+//            System.out.println("nums[i - k] = " + nums[i - k]);
+            // nums[i - k] 就是当前循环要删除的元素（最老的元素）
+            if (!queue.isEmpty() && queue.peekFirst() == nums[i - k]) {
+                queue.removeFirst();
+            }
 
-        System.out.println((byte)ch);
-        System.out.println((byte)chA);
-
+            // 删除所有比自己小的元素
+            while (!queue.isEmpty() && nums[i] > queue.peekLast()) {
+                queue.removeLast();
+            }
+            queue.offerLast(nums[i]);  //放队尾
+            result[index++] = queue.peekFirst();
+        }
+        return result;
     }
+
+
+    // 76. 最小覆盖子串
+    // 输入：s = "ADOBECODEBANC", t = "ABC"
+    //输出："BANC"
+    //265 / 268 超时
+    public String minWindow_todo(String s, String t) {
+        String result = "";
+        char[] charArray = s.toCharArray();
+
+        int left = 0;
+        int right = 0;
+        StringBuilder sb = new StringBuilder();
+        while (true) {
+            if (left > right) {
+                if (containsAllTarget(sb, t)) {
+                    if (result.isEmpty()) {
+                        result = sb.toString();
+                    } else {
+                        result = result.length() > sb.length() ? sb.toString() : result;
+                    }
+                }
+                break;
+            }
+            if (containsAllTarget(sb, t)) {
+                System.out.println(sb);
+                if (result.isEmpty()) {
+                    result = sb.toString();
+                } else {
+                    result = result.length() > sb.length() ? sb.toString() : result;
+                }
+                left++;
+                sb.deleteCharAt(0);
+            } else if (right < s.length()) {
+                sb.append(charArray[right]);
+                right++;
+            } else {
+                break;
+            }
+        }
+        return result;
+    }
+
+    private boolean containsAllTarget(StringBuilder sb, String t) {
+        char[] sourceArr = sb.toString().toCharArray();
+        char[] targetArr = t.toCharArray();
+        boolean[] targetRes = new boolean[targetArr.length];
+
+        for (int i = 0; i < targetArr.length; i++) {
+            for (int j = 0; j < sourceArr.length; j++) {
+                if (sourceArr[j] == targetArr[i]) {
+                    targetRes[i] = true;
+                    sourceArr[j] = '0';
+                    break;
+                }
+            }
+        }
+        for (boolean boo : targetRes) {
+            if (!boo) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+        @Test
+    public void test1() {
+        int[] nums = {-7,-8,7,5,7,1,6,0};
+
+            int[] ints = maxSlidingWindow(nums, 4);
+            System.out.println(Arrays.toString(ints));
+
+            String string = "aavb";
+            String string1 = string.replaceFirst("a", "");
+            System.out.println("string1 = " + string1);
+
+
+        }
 }
