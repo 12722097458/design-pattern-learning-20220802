@@ -1,6 +1,7 @@
 package com.ityj.algorithm.year2025;
 
 import com.ityj.algorithm.entity.ListNode;
+import com.ityj.algorithm.entity.TreeNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -363,8 +364,141 @@ public class TestAugust {
         return true;
     }
 
+    public int climbStairs(int n) {
+        int[] resultArr = new int[n + 1];
+        return climb(resultArr, n);
+    }
 
-        @Test
+    private int climb(int[] resultArr, int n) {
+        if (resultArr[n] != 0) {
+            return resultArr[n];
+        }
+        if (n == 1) {
+            resultArr[n] = 1;
+        } else if (n == 2) {
+            resultArr[n] = 2;
+        } else {
+            resultArr[n] = climb(resultArr, n -1) + climb(resultArr, n - 2);
+        }
+        return resultArr[n];
+    }
+
+    public List<List<Integer>> combinationSum_0822(int[] candidates, int target) {
+
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> tmpList = new ArrayList<>();
+        backtracking_0822(candidates, target, result, tmpList, 0, 0);
+        return result;
+
+
+    }
+
+    private void backtracking_0822(int[] candidates, int target, List<List<Integer>> result, List<Integer> tmpList, int sum, int fromIndex) {
+        if (sum >= target) {
+            if (sum == target) {
+                result.add(new ArrayList<>(tmpList));
+            }
+            return;
+        }
+
+        for (int i = fromIndex; i < candidates.length; i++) {
+            tmpList.add(candidates[i]);
+            backtracking_0822(candidates, target, result, tmpList, sum + candidates[i], i);
+            tmpList.remove(tmpList.size() - 1);
+        }
+    }
+
+    public List<List<Integer>> subsets_0822(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> tmpList = new ArrayList<>();
+        subset_0822(nums, result, tmpList, 0);
+        return result;
+
+    }
+
+    private void subset_0822(int[] nums, List<List<Integer>> result, List<Integer> tmpList, int fromIndex) {
+        result.add(new ArrayList<>(tmpList));
+        for (int i = fromIndex; i < nums.length; i++) {
+            tmpList.add(nums[i]);
+            subset_0822(nums, result, tmpList, i + 1);
+            tmpList.remove(tmpList.size() - 1);
+        }
+    }
+
+    public boolean isSymmetric(TreeNode root) {
+
+        if (root == null) {
+            return false;
+        }
+        return checkTree(root.left, root.right);
+    }
+
+    private boolean checkTree(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        }
+        if (left == null || right == null) {
+            return false;
+        }
+        if (left.val != right.val) {
+            return false;
+        }
+        return checkTree(left.left, right.right) && checkTree(left.right, right.left);
+    }
+
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftDepth = maxDepth(root.left);
+        int rightDepth = maxDepth(root.right);
+        return Math.max(leftDepth, rightDepth) + 1;
+    }
+
+
+    // 输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
+    //输出：[3,3,5,5,6,7]
+    public int[] maxSlidingWindow_0822(int[] nums, int k) {
+        int[] resultArr = new int[nums.length - k + 1];
+        LinkedList<Integer> queue = new LinkedList<>();
+
+        for (int i = 0; i < k; i++) {
+            int num = nums[i];
+            while (true) {
+                if (!queue.isEmpty() && num > queue.peekLast()) {
+                    queue.removeLast();
+                } else {
+                    queue.offerLast(num);
+                    break;
+                }
+            }
+        }
+        int index = 0;
+        resultArr[index++] = queue.peekFirst();
+
+        for (int i = k; i < nums.length; i++) {
+            int num = nums[i];
+
+            // 剔除最老的
+            if (!queue.isEmpty() && nums[i - k] == queue.peekFirst()) {
+                queue.removeFirst();
+            }
+            while (true) {
+                if (!queue.isEmpty() && num > queue.peekLast()) {
+                    queue.removeLast();
+                } else {
+                    queue.offerLast(num);
+                    break;
+                }
+            }
+            resultArr[index++] = queue.peekFirst();
+        }
+        return resultArr;
+    }
+
+
+
+    @Test
     public void test1() {
         int[] nums = {-7,-8,7,5,7,1,6,0};
 
