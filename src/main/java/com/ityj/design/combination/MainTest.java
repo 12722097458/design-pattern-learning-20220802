@@ -2,6 +2,7 @@ package com.ityj.design.combination;
 
 /*
 *   组合模式
+*  树形结构
 * */
 public class MainTest {
     public static void main(String[] args) {
