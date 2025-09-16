@@ -2,6 +2,7 @@ package com.ityj.algorithm.year2025;
 
 import org.junit.jupiter.api.Test;
 
+import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -108,6 +109,71 @@ public class TestSeptember {
             tmpList.remove(tmpList.size() - 1);
         }
     }
+
+    // 冒泡排序 912. 排序数组
+    // 1 3 4 2 5 1
+    public int[] bubbleSort(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            boolean flag = false;
+            for (int j = 0; j < nums.length - i - 1; j++) {
+                if (nums[j] > nums[j + 1]) {
+                    int tmp = nums[j + 1];
+                    nums[j + 1] = nums[j];
+                    nums[j] = tmp;
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                // 当前循环没有交换任何数据，即排序正常
+                return nums;
+            }
+        }
+        return nums;
+    }
+
+
+    public int[] maxSlidingWindow_0916(int[] nums, int k) {
+        if (nums == null || k > nums.length) {
+            return null;
+        }
+
+        int[] result = new int[nums.length - k + 1];
+
+        LinkedList<Integer> queue = new LinkedList<>();
+        // 前k个
+        for (int i = 0; i < k; i++) {
+            while (true) {
+                if (!queue.isEmpty() && nums[i] > queue.getLast()) {
+                    queue.removeLast();
+                } else {
+                    queue.addLast(nums[i]);
+                    break;
+                }
+            }
+        }
+        int index = 0;
+        result[index++] = queue.getFirst();
+
+        // 后面的
+        for (int i = k; i < nums.length; i++) {
+            if (!queue.isEmpty() && queue.getFirst() == nums[i - k]) {
+                queue.removeFirst();
+            }
+
+            while (true) {
+                if (!queue.isEmpty() && nums[i] > queue.getLast()) {
+                    queue.removeLast();
+                } else {
+                    queue.addLast(nums[i]);
+                    break;
+                }
+            }
+            result[index++] = queue.getFirst();
+        }
+        return result;
+    }
+
+
 
 
     @Test
