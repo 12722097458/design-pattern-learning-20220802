@@ -3,10 +3,7 @@ package com.ityj.algorithm.year2025;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.transform.Result;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class TestSeptember {
 
@@ -173,12 +170,64 @@ public class TestSeptember {
         return result;
     }
 
+    // 给出n个正整数 4;(1 ≤i≤ n)支持两种操作:
+    //1.删除两个相同的数，添加这两个数之和
+    //2.删除两个数，添加这两个数中的最大值
+    //已知通过n - 1次操作后，只剩下一个数，求这个数的最大值，
 
+    public static int getMaxValue(int count, int[] nums) {
+
+        // Scanner输入两行，第一行是总数，第二行是数组
+        Scanner scanner = new Scanner(System.in);
+        String st = scanner.nextLine();
+        count = Integer.parseInt(st);
+        System.out.println("st = " + st);
+        /*count = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("count = " + count);*/
+        String arrStr = scanner.nextLine();
+        String[] splitArr = arrStr.split(" ");
+        for (int i = 0; i < splitArr.length; i++) {
+            nums[i] = Integer.parseInt(splitArr[i]);
+        }
+        System.out.println(Arrays.toString(nums));
+
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        for (int num : nums) {
+            queue.add(num);
+        }
+
+        while (true) {
+            if (!queue.isEmpty() && queue.size() > 1) {
+                int first = queue.poll();
+                int second = queue.poll();
+                if (first == second) {
+                    queue.add(first + second);
+                } else {
+                    queue.add(Math.max(first, second));
+                }
+            } else {
+                break;
+            }
+        }
+        return queue.peek();
+    }
+
+
+    public static void main(String[] args) {
+        int[] nums = {-7,-8,7};
+
+        int maxValue = getMaxValue(4, nums);
+        System.out.println("maxValue = " + maxValue);
+    }
 
 
     @Test
     public void test1() {
         int[] nums = {-7,-8,7,5,7,1,6,0};
+
+        int maxValue = getMaxValue(4, nums);
+        System.out.println("maxValue = " + maxValue);
 
     }
 }
