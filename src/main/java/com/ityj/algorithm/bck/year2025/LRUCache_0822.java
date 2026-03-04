@@ -1,24 +1,24 @@
-package com.ityj.algorithm.year2025;
+package com.ityj.algorithm.bck.year2025;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class LRUCache_1020 {
+class LRUCache_0822 {
 
+    private Map<Integer, Node> map;
     private int capacity;
     private Node head;
     private Node tail;
-    private Map<Integer, Node> map;
 
-    public LRUCache_1020(int capacity) {
+    public LRUCache_0822(int capacity) {
         this.capacity = capacity;
-        head = new Node();
-        tail = new Node();
-        head.next = tail;
-        tail.pre = head;
-        map = new HashMap<>();
+        this.head = new Node();
+        this.tail = new Node();
+        this.map = new HashMap<>();
+        this.head.next = this.tail;
+        this.tail.pre = this.head;
     }
-
+    
     public int get(int key) {
         if (map.containsKey(key)) {
             Node node = map.get(key);
@@ -29,42 +29,47 @@ class LRUCache_1020 {
             return -1;
         }
     }
-
+    
     public void put(int key, int value) {
         Node node = new Node(key, value);
         if (map.containsKey(key)) {
-            removeNode(map.get(key));
+            Node toRemove = map.get(key);
+            removeNode(toRemove);
         }
-        if (map.size() >= capacity) {
-            removeNode(tail.pre);
+        while (true) {
+            if (map.size() < capacity) {
+                break;
+            }
+            Node preTail = tail.pre;
+            removeNode(preTail);
         }
         addNodeToFirst(node);
+    }
+
+    public void addNodeToFirst(Node node) {
+        Node first = head.next;
+        head.next = node;
+        node.pre = head;
+        node.next = first;
+        first.pre = node;
+        map.put(node.key, node);
     }
 
     public void removeNode(Node node) {
         Node preNode = node.pre;
         Node nextNode = node.next;
+
         preNode.next = nextNode;
         nextNode.pre = preNode;
         map.remove(node.key);
     }
 
-    public void addNodeToFirst(Node node) {
-        Node firstNode = head.next;
-        head.next = node;
-        node.pre = head;
-        node.next = firstNode;
-        firstNode.pre = node;
-        map.put(node.key, node);
-    }
-
-
 
     class Node {
         int key;
         int value;
-        Node next;
         Node pre;
+        Node next;
 
         public Node() {
         }
@@ -72,15 +77,15 @@ class LRUCache_1020 {
         public Node(int key, int value) {
             this.key = key;
             this.value = value;
+            this.pre = null;
+            this.next = null;
         }
-    }
-
-
-    public static void main(String[] args) {
-         LRUCache_1020 obj = new LRUCache_1020(2);
-        obj.put(2,1);
-        obj.put(2,2);
-        obj.get(2);
     }
 }
 
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */

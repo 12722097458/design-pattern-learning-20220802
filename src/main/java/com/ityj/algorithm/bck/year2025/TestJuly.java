@@ -1,12 +1,10 @@
-package com.ityj.algorithm.year2025;
+package com.ityj.algorithm.bck.year2025;
 
 import com.ityj.algorithm.entity.ListNode;
-import com.ityj.algorithm.entity.Student;
 import com.ityj.algorithm.entity.TreeNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TestJuly {
 

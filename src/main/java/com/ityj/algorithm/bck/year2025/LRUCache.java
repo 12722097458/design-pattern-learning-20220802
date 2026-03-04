@@ -1,22 +1,42 @@
-package com.ityj.algorithm.year2025;
+package com.ityj.algorithm.bck.year2025;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class LRUCache0815 {
+class Node {
+    int key;
+    int value;
+    Node pre;
+    Node next;
+    public Node() {
+        this.key = 0;
+        this.value = 0;
+        pre = null;
+        next = null;
+    }
+    public Node(int key, int value) {
+        this.key = key;
+        this.value = value;
+        pre = null;
+        next = null;
+    }
+}
 
-    private Map<Integer, Node> map;
+class LRUCache {
     private Node head;
     private Node tail;
-    private int capacity;
-    private int size;
+    private Map<Integer, Node> map;
+    int capacity;
+    int size;
 
-    public LRUCache0815(int capacity) {
+
+    public LRUCache(int capacity) {
         this.capacity = capacity;
-        this.size = 0;
-        this.map = new HashMap<>();
-        this.head = new Node();
-        this.tail = new Node();
+        head = new Node();
+        tail = new Node();
+        map = new HashMap<>();
         head.next = tail;
         tail.pre = head;
     }
@@ -33,23 +53,21 @@ class LRUCache0815 {
     }
     
     public void put(int key, int value) {
-        Node curr = new Node(key, value);
         if (map.containsKey(key)) {
-            removeNode(map.get(key));
+            Node node = map.get(key);
+            removeNode(node);
             map.remove(key);
             size--;
         }
-        while (true) {
-            if (size < capacity) {
-                break;
-            }
-            Node last = tail.pre;
-            removeNode(last);
-            map.remove(last.key);
+        if (size == capacity) {
+            Node toRemove = tail.pre;
+            removeNode(toRemove);
+            map.remove(toRemove.key);
             size--;
         }
-        addNodeToHead(curr);
-        map.put(key, curr);
+        Node node = new Node(key, value);
+        addNodeToHead(node);
+        map.put(key, node);
         size++;
     }
 
@@ -62,45 +80,31 @@ class LRUCache0815 {
 
     public void addNodeToHead(Node node) {
         Node tmp = head.next;
-        head.next = node;
         node.pre = head;
+        head.next = node;
         node.next = tmp;
         tmp.pre = node;
     }
 
-    class Node {
-        private Node pre;
-        private Node next;
-        private int key;
-        private int value;
-
-        public Node() {
-            this.value = 0;
-            this.key = 0;
-            this.next = null;
-            this.pre = null;
-        }
-
-        public Node(int key, int value) {
-            this.value = value;
-            this.key = key;
-            this.next = null;
-            this.pre = null;
-        }
-    }
-
 
     public static void main(String[] args) {
-        LRUCache0815 cache = new LRUCache0815(2);
-        cache.put(2, 1);
-        cache.put(2, 2);
-        int i = cache.get(2);
+        LRUCache cache = new LRUCache(2);
         cache.put(1, 1);
-        cache.put(4, 1);
+        cache.put(2, 2);
+        int i = cache.get(1);
+        cache.put(3, 3);
         int i2 = cache.get(2);
+        cache.put(4, 4);
+        int i3 = cache.get(1);
+        int i4 = cache.get(3);
+        int i5 = cache.get(4);
         System.out.println("i5 = " + i);
         System.out.println("i5 = " + i2);
+        System.out.println("i5 = " + i3);
+        System.out.println("i5 = " + i4);
+        System.out.println("i5 = " + i5);
     }
+
 }
 
 /**

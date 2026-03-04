@@ -1,8 +1,7 @@
-package com.ityj.algorithm.year2025;
+package com.ityj.algorithm.bck.year2025;
 
 import org.junit.jupiter.api.Test;
 
-import javax.xml.transform.Result;
 import java.util.*;
 
 public class TestSeptember {

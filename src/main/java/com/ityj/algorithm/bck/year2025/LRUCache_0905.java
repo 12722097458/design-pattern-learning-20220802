@@ -1,28 +1,23 @@
-package com.ityj.algorithm.year2025;
+package com.ityj.algorithm.bck.year2025;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class LRUCache_0821 {
+class LRUCache_0905 {
 
     class Node {
-        private Node next;
-        private Node pre;
-        private int key;
-        private int value;
-
+        int key;
+        int val;
+        Node pre;
+        Node next;
         public Node() {
-            this.pre = null;
-            this.next = null;
-            this.key = 0;
-            this.value = 0;
         }
 
-        public Node(int key, int value) {
+        public Node(int key, int val) {
+            this.key = key;
+            this.val = val;
             this.pre = null;
             this.next = null;
-            this.key = key;
-            this.value = value;
         }
     }
 
@@ -31,13 +26,14 @@ class LRUCache_0821 {
     private Node tail;
     private int capacity;
 
-    public LRUCache_0821(int capacity) {
+
+    public LRUCache_0905(int capacity) {
         this.capacity = capacity;
         head = new Node();
         tail = new Node();
-        head.next = tail;
-        tail.next = head;
         map = new HashMap<>();
+        head.next = tail;
+        tail.pre = head;
     }
     
     public int get(int key) {
@@ -45,7 +41,7 @@ class LRUCache_0821 {
             Node node = map.get(key);
             removeNode(node);
             addNodeToFirst(node);
-            return node.value;
+            return node.val;
         } else {
             return -1;
         }
@@ -54,32 +50,41 @@ class LRUCache_0821 {
     public void put(int key, int value) {
         Node node = new Node(key, value);
         if (map.containsKey(key)) {
-            Node old = map.get(key);
-            removeNode(old);
+            Node oldNode = map.get(key);
+            removeNode(oldNode);
         }
-        while (map.size() >= capacity) {
-            Node toRemove = tail.pre;
-            removeNode(toRemove);
+        while (true) {
+            if (map.size() >= capacity ) {
+                Node toRemove = tail.pre;
+                removeNode(toRemove);
+            } else {
+                break;
+            }
         }
         addNodeToFirst(node);
     }
 
     public void addNodeToFirst(Node node) {
-        Node first = head.next;
+        Node firstNode = head.next;
         head.next = node;
         node.pre = head;
-        node.next = first;
-        first.pre = node;
+        node.next = firstNode;
+        firstNode.pre = node;
         map.put(node.key, node);
     }
 
     public void removeNode(Node node) {
-        Node pre = node.pre;
-        Node next = node.next;
-        pre.next = node.next;
-        next.pre = pre;
-        map.remove(node.key);
+        if (map.containsKey(node.key)) {
+            Node preNode = node.pre;
+            Node nextNode = node.next;
+            preNode.next = nextNode;
+            nextNode.pre = preNode;
+            map.remove(node.key);
+        } else {
+            System.out.println(node + " is not exist!");
+        }
     }
+
 }
 
 /**

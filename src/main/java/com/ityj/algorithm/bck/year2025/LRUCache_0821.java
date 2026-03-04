@@ -1,23 +1,28 @@
-package com.ityj.algorithm.year2025;
+package com.ityj.algorithm.bck.year2025;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class LRUCache_0905 {
+class LRUCache_0821 {
 
     class Node {
-        int key;
-        int val;
-        Node pre;
-        Node next;
-        public Node() {
-        }
+        private Node next;
+        private Node pre;
+        private int key;
+        private int value;
 
-        public Node(int key, int val) {
-            this.key = key;
-            this.val = val;
+        public Node() {
             this.pre = null;
             this.next = null;
+            this.key = 0;
+            this.value = 0;
+        }
+
+        public Node(int key, int value) {
+            this.pre = null;
+            this.next = null;
+            this.key = key;
+            this.value = value;
         }
     }
 
@@ -26,14 +31,13 @@ class LRUCache_0905 {
     private Node tail;
     private int capacity;
 
-
-    public LRUCache_0905(int capacity) {
+    public LRUCache_0821(int capacity) {
         this.capacity = capacity;
         head = new Node();
         tail = new Node();
-        map = new HashMap<>();
         head.next = tail;
-        tail.pre = head;
+        tail.next = head;
+        map = new HashMap<>();
     }
     
     public int get(int key) {
@@ -41,7 +45,7 @@ class LRUCache_0905 {
             Node node = map.get(key);
             removeNode(node);
             addNodeToFirst(node);
-            return node.val;
+            return node.value;
         } else {
             return -1;
         }
@@ -50,41 +54,32 @@ class LRUCache_0905 {
     public void put(int key, int value) {
         Node node = new Node(key, value);
         if (map.containsKey(key)) {
-            Node oldNode = map.get(key);
-            removeNode(oldNode);
+            Node old = map.get(key);
+            removeNode(old);
         }
-        while (true) {
-            if (map.size() >= capacity ) {
-                Node toRemove = tail.pre;
-                removeNode(toRemove);
-            } else {
-                break;
-            }
+        while (map.size() >= capacity) {
+            Node toRemove = tail.pre;
+            removeNode(toRemove);
         }
         addNodeToFirst(node);
     }
 
     public void addNodeToFirst(Node node) {
-        Node firstNode = head.next;
+        Node first = head.next;
         head.next = node;
         node.pre = head;
-        node.next = firstNode;
-        firstNode.pre = node;
+        node.next = first;
+        first.pre = node;
         map.put(node.key, node);
     }
 
     public void removeNode(Node node) {
-        if (map.containsKey(node.key)) {
-            Node preNode = node.pre;
-            Node nextNode = node.next;
-            preNode.next = nextNode;
-            nextNode.pre = preNode;
-            map.remove(node.key);
-        } else {
-            System.out.println(node + " is not exist!");
-        }
+        Node pre = node.pre;
+        Node next = node.next;
+        pre.next = node.next;
+        next.pre = pre;
+        map.remove(node.key);
     }
-
 }
 
 /**
